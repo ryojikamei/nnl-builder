@@ -20,4 +20,5 @@ NoNameLinux Builder *will be* a couple of scripts to build NoNameLinux installat
 
 
 **Why NoNameLinux is developed?**
+
 I was a Linux distribution developer for 15 years, but, recently I had not gotten any Linux distribution development jobs. All jobs are gone to foreign engineers. But anyway I need to continue it because I like it. NNL is a little piece of something for my peaceful mind.
