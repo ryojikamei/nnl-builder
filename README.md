@@ -1,7 +1,7 @@
 nnl-builder
 ===========
 
-NoNameLinux Builder
+NNL Builder, for building NoNameLinux.
 
 **What is 'NoNameLinux'?**
 
@@ -14,9 +14,9 @@ NoNameLinux *will be* a yet another small Linux distribution, with following fea
 5. *It has active security updates.* Like general distribution, in other words, unlike distributions for old machines, it provides security updates.
 
 
-**What is 'NoNameLinux Builder'?**
+**What is 'NNL Builder'?**
 
-NoNameLinux Builder *will be* a couple of scripts to build NoNameLinux installation image itself.
+NNL Builder *will be* a couple of scripts to build NoNameLinux installation image itself.
 
 
 **Why NoNameLinux is developed?**
