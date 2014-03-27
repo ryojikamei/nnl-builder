@@ -1,0 +1,4 @@
+Package:	gcc
+Version:	4.6.4-3
+Architecture:	i486
+Depends:	binutils

@@ -1,0 +1,4 @@
+Package:	zlib
+Version:	1.2.8-1
+Architecture:	i486
+Depends:

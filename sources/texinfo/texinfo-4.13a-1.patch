@@ -1,0 +1,11 @@
+--- texinfo-4.13/info/Makefile.in-1	2008-09-19 03:46:24.000000000 -0900
++++ texinfo-4.13/info/Makefile.in	2014-03-25 15:47:18.000000000 -0900
+@@ -132,7 +132,7 @@
+ 	window.$(OBJEXT)
+ nodist_ginfo_OBJECTS = doc.$(OBJEXT)
+ ginfo_OBJECTS = $(am_ginfo_OBJECTS) $(nodist_ginfo_OBJECTS)
+-ginfo_LDADD = $(LDADD)
++ginfo_LDADD = $(LDADD) -lncursesw
+ am__DEPENDENCIES_1 =
+ ginfo_DEPENDENCIES = ../lib/libtxi.a \
+ 	$(top_builddir)/gnulib/lib/libgnu.a $(am__DEPENDENCIES_1) \

@@ -1,0 +1,439 @@
+--- gcc-4.6.4-orig/Makefile.in
++++ gcc-4.6.4-Os/Makefile.in
+@@ -358,7 +358,7 @@
+ 
+ # Flags to pass to stage2 and later makes.  They are defined
+ # here so that they can be overridden by Makefile fragments.
+-BOOT_CFLAGS= -g -O2
++BOOT_CFLAGS= -g -Os
+ BOOT_LDFLAGS=
+ BOOT_ADAFLAGS=-gnatpg -gnata
+ 
+@@ -544,7 +544,7 @@
+ LIBCFLAGS_FOR_TARGET = $(CFLAGS_FOR_TARGET)
+ LIBCXXFLAGS_FOR_TARGET = $(CXXFLAGS_FOR_TARGET) -fno-implicit-templates
+ LDFLAGS_FOR_TARGET = 
+-GOCFLAGS_FOR_TARGET = -O2 -g
++GOCFLAGS_FOR_TARGET = -Os -g
+ 
+ FLAGS_FOR_TARGET = @FLAGS_FOR_TARGET@
+ SYSROOT_CFLAGS_FOR_TARGET = @SYSROOT_CFLAGS_FOR_TARGET@
+--- gcc-4.6.4-orig/Makefile.tpl
++++ gcc-4.6.4-Os/Makefile.tpl
+@@ -361,7 +361,7 @@
+ 
+ # Flags to pass to stage2 and later makes.  They are defined
+ # here so that they can be overridden by Makefile fragments.
+-BOOT_CFLAGS= -g -O2
++BOOT_CFLAGS= -g -Os
+ BOOT_LDFLAGS=
+ BOOT_ADAFLAGS=-gnatpg -gnata
+ 
+@@ -497,7 +497,7 @@
+ LIBCFLAGS_FOR_TARGET = $(CFLAGS_FOR_TARGET)
+ LIBCXXFLAGS_FOR_TARGET = $(CXXFLAGS_FOR_TARGET) -fno-implicit-templates
+ LDFLAGS_FOR_TARGET = 
+-GOCFLAGS_FOR_TARGET = -O2 -g
++GOCFLAGS_FOR_TARGET = -Os -g
+ 
+ FLAGS_FOR_TARGET = @FLAGS_FOR_TARGET@
+ SYSROOT_CFLAGS_FOR_TARGET = @SYSROOT_CFLAGS_FOR_TARGET@
+--- gcc-4.6.4-orig/configure
++++ gcc-4.6.4-Os/configure
+@@ -4519,13 +4519,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-Os"
+   else
+     CFLAGS=
+   fi
+@@ -4867,13 +4867,13 @@
+   CXXFLAGS=$ac_save_CXXFLAGS
+ elif test $ac_cv_prog_cxx_g = yes; then
+   if test "$GXX" = yes; then
+-    CXXFLAGS="-g -O2"
++    CXXFLAGS="-g -Os"
+   else
+     CXXFLAGS="-g"
+   fi
+ else
+   if test "$GXX" = yes; then
+-    CXXFLAGS="-O2"
++    CXXFLAGS="-Os"
+   else
+     CXXFLAGS=
+   fi
+@@ -6734,8 +6734,8 @@
+ if test "x$CFLAGS_FOR_TARGET" = x; then
+   CFLAGS_FOR_TARGET=$CFLAGS
+   case " $CFLAGS " in
+-    *" -O2 "*) ;;
+-    *) CFLAGS_FOR_TARGET="-O2 $CFLAGS" ;;
++    *" -Os "*) ;;
++    *) CFLAGS_FOR_TARGET="-Os $CFLAGS" ;;
+   esac
+   case " $CFLAGS " in
+     *" -g "* | *" -g3 "*) ;;
+@@ -6747,8 +6747,8 @@
+ if test "x$CXXFLAGS_FOR_TARGET" = x; then
+   CXXFLAGS_FOR_TARGET=$CXXFLAGS
+   case " $CXXFLAGS " in
+-    *" -O2 "*) ;;
+-    *) CXXFLAGS_FOR_TARGET="-O2 $CXXFLAGS" ;;
++    *" -Os "*) ;;
++    *) CXXFLAGS_FOR_TARGET="-Os $CXXFLAGS" ;;
+   esac
+   case " $CXXFLAGS " in
+     *" -g "* | *" -g3 "*) ;;
+--- gcc-4.6.4-orig/fixincludes/configure
++++ gcc-4.6.4-Os/fixincludes/configure
+@@ -3920,13 +3920,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-Os"
+   else
+     CFLAGS=
+   fi
+--- gcc-4.6.4-orig/gcc/configure
++++ gcc-4.6.4-Os/gcc/configure
+@@ -4140,13 +4140,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-Os"
+   else
+     CFLAGS=
+   fi
+@@ -4617,13 +4617,13 @@
+   CXXFLAGS=$ac_save_CXXFLAGS
+ elif test $ac_cv_prog_cxx_g = yes; then
+   if test "$GXX" = yes; then
+-    CXXFLAGS="-g -O2"
++    CXXFLAGS="-g -Os"
+   else
+     CXXFLAGS="-g"
+   fi
+ else
+   if test "$GXX" = yes; then
+-    CXXFLAGS="-O2"
++    CXXFLAGS="-Os"
+   else
+     CXXFLAGS=
+   fi
+--- gcc-4.6.4-orig/gmp/configure
++++ gcc-4.6.4-Os/gmp/configure
+@@ -3978,8 +3978,8 @@
+ #
+ cclist="gcc cc"
+ 
+-gcc_cflags="-O2 -pedantic"
+-gcc_64_cflags="-O2 -pedantic"
++gcc_cflags="-Os -pedantic"
++gcc_64_cflags="-Os -pedantic"
+ cc_cflags="-O"
+ cc_64_cflags="-O"
+ 
+@@ -4501,7 +4501,7 @@
+     HAVE_HOST_CPU_FAMILY_powerpc=1
+     abilist="32"
+     cclist="gcc cc"
+-    cc_cflags="-O2"
++    cc_cflags="-Os"
+     gcc_32_cflags="$gcc_cflags -mpowerpc"
+     gcc_cflags_optlist="precomp subtype asm cpu"
+     gcc_cflags_precomp="-no-cpp-precomp"
+@@ -4599,7 +4599,7 @@
+ 	    gcc_mode64_cflags="$gcc_cflags -maix64 -mpowerpc64"
+ 	    gcc_mode64_cflags_optlist="cpu"
+ 	    gcc_mode64_ldflags="-Wc,-maix64"
+-	    xlc_mode64_cflags="-O2 -q64 -qmaxmem=20000"
++	    xlc_mode64_cflags="-Os -q64 -qmaxmem=20000"
+ 	    xlc_mode64_cflags_optlist="arch"
+ 	    xlc_mode64_ldflags="-Wc,-q64"
+ 	    # Must indicate object type to ar and nm
+@@ -8939,13 +8939,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-Os"
+   else
+     CFLAGS=
+   fi
+@@ -9989,13 +9989,13 @@
+   CXXFLAGS=$ac_save_CXXFLAGS
+ elif test $ac_cv_prog_cxx_g = yes; then
+   if test "$GXX" = yes; then
+-    CXXFLAGS="-g -O2"
++    CXXFLAGS="-g -Os"
+   else
+     CXXFLAGS="-g"
+   fi
+ else
+   if test "$GXX" = yes; then
+-    CXXFLAGS="-O2"
++    CXXFLAGS="-Os"
+   else
+     CXXFLAGS=
+   fi
+--- gcc-4.6.4-orig/intl/configure
++++ gcc-4.6.4-Os/intl/configure
+@@ -3288,13 +3288,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-Os"
+   else
+     CFLAGS=
+   fi
+--- gcc-4.6.4-orig/libcpp/configure
++++ gcc-4.6.4-Os/libcpp/configure
+@@ -3377,13 +3377,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-Os"
+   else
+     CFLAGS=
+   fi
+@@ -3725,13 +3725,13 @@
+   CXXFLAGS=$ac_save_CXXFLAGS
+ elif test $ac_cv_prog_cxx_g = yes; then
+   if test "$GXX" = yes; then
+-    CXXFLAGS="-g -O2"
++    CXXFLAGS="-g -Os"
+   else
+     CXXFLAGS="-g"
+   fi
+ else
+   if test "$GXX" = yes; then
+-    CXXFLAGS="-O2"
++    CXXFLAGS="-Os"
+   else
+     CXXFLAGS=
+   fi
+--- gcc-4.6.4-orig/libdecnumber/configure
++++ gcc-4.6.4-Os/libdecnumber/configure
+@@ -2910,13 +2910,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-Os"
+   else
+     CFLAGS=
+   fi
+--- gcc-4.6.4-orig/libffi/configure
++++ gcc-4.6.4-Os/libffi/configure
+@@ -3748,13 +3748,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-Os"
+   else
+     CFLAGS=
+   fi
+--- gcc-4.6.4-orig/libgcc/configure
++++ gcc-4.6.4-Os/libgcc/configure
+@@ -3398,13 +3398,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-Os"
+   else
+     CFLAGS=
+   fi
+--- gcc-4.6.4-orig/libgomp/configure
++++ gcc-4.6.4-Os/libgomp/configure
+@@ -3976,13 +3976,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-Os"
+   else
+     CFLAGS=
+   fi
+@@ -11680,13 +11680,13 @@
+   FCFLAGS=$ac_save_FCFLAGS
+ elif test $ac_cv_prog_fc_g = yes; then
+   if test "x$ac_cv_fc_compiler_gnu" = xyes; then
+-    FCFLAGS="-g -O2"
++    FCFLAGS="-g -Os"
+   else
+     FCFLAGS="-g"
+   fi
+ else
+   if test "x$ac_cv_fc_compiler_gnu" = xyes; then
+-    FCFLAGS="-O2"
++    FCFLAGS="-Os"
+   else
+     FCFLAGS=
+   fi
+--- gcc-4.6.4-orig/libiberty/configure
++++ gcc-4.6.4-Os/libiberty/configure
+@@ -3471,13 +3471,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-Os"
+   else
+     CFLAGS=
+   fi
+--- gcc-4.6.4-orig/libstdc++-v3/configure
++++ gcc-4.6.4-Os/libstdc++-v3/configure
+@@ -4216,13 +4216,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-Os"
+   else
+     CFLAGS=
+   fi
+@@ -4564,13 +4564,13 @@
+   CXXFLAGS=$ac_save_CXXFLAGS
+ elif test $ac_cv_prog_cxx_g = yes; then
+   if test "$GXX" = yes; then
+-    CXXFLAGS="-g -O2"
++    CXXFLAGS="-g -Os"
+   else
+     CXXFLAGS="-g"
+   fi
+ else
+   if test "$GXX" = yes; then
+-    CXXFLAGS="-O2"
++    CXXFLAGS="-Os"
+   else
+     CXXFLAGS=
+   fi
+--- gcc-4.6.4-orig/mpc/configure
++++ gcc-4.6.4-Os/mpc/configure
+@@ -3999,13 +3999,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-Os"
+   else
+     CFLAGS=
+   fi
+--- gcc-4.6.4-orig/mpfr/configure
++++ gcc-4.6.4-Os/mpfr/configure
+@@ -4208,13 +4208,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-Os"
+   else
+     CFLAGS=
+   fi

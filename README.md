@@ -1,7 +1,7 @@
 nnl-builder
 ===========
 
-NNL Builder, for building NoNameLinux
+NNL Builder, for building NoNameLinux.
 
 **What is 'NoNameLinux'?**
 

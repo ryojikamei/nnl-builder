@@ -1,0 +1,7 @@
+# Begin /etc/hosts (network card version)
+
+127.0.0.1       localhost
+192.168.1.1     musl.example.org musl
+144.76.72.4  svn.openmoko.org
+
+# End /etc/hosts (network card version)

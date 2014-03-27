@@ -1,0 +1,9 @@
+/etc/shells
+/etc/services
+/etc/protocols
+/etc/profile
+/etc/passwd
+/etc/motd
+/etc/hosts
+/etc/group
+/etc/fstab

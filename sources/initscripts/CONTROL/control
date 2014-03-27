@@ -1,0 +1,4 @@
+Package:	initscripts
+Version:	1.0-1
+Architecture:	noarch
+Depends:	filesystem

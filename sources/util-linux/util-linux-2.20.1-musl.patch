@@ -1,0 +1,201 @@
+--- ./text-utils/hexdump.h-1	2011-09-26 18:50:25.000000000 +0900
++++ ./text-utils/hexdump.h	2014-02-14 12:12:33.838697937 +0900
+@@ -33,6 +33,8 @@
+  *	@(#)hexdump.h	5.4 (Berkeley) 6/1/90
+  */
+ 
++typedef unsigned char u_char;
++
+ typedef struct _pr {
+ 	struct _pr *nextpr;		/* next print unit */
+ #define	F_ADDRESS	0x001		/* print offset */
+--- ./misc-utils/Makefile.in-1	2011-10-20 17:37:31.000000000 +0900
++++ ./misc-utils/Makefile.in	2014-02-14 11:51:02.986697126 +0900
+@@ -43,7 +43,7 @@
+ bin_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2) $(am__EXEEXT_3)
+ sbin_PROGRAMS = $(am__EXEEXT_4) $(am__EXEEXT_5)
+ usrsbin_exec_PROGRAMS = $(am__EXEEXT_9)
+-usrbin_exec_PROGRAMS = cal$(EXEEXT) logger$(EXEEXT) look$(EXEEXT) \
++usrbin_exec_PROGRAMS = cal$(EXEEXT) look$(EXEEXT) \
+ 	mcookie$(EXEEXT) namei$(EXEEXT) whereis$(EXEEXT) \
+ 	$(am__EXEEXT_6) $(am__EXEEXT_7) $(am__EXEEXT_8)
+ @BUILD_DDATE_TRUE@am__append_1 = ddate
+@@ -267,13 +267,13 @@
+ am__v_GEN_0 = @echo "  GEN   " $@;
+ SOURCES = $(blkid_SOURCES) $(blkid_static_SOURCES) $(cal_SOURCES) \
+ 	ddate.c findfs.c $(findmnt_SOURCES) $(kill_SOURCES) \
+-	$(logger_SOURCES) look.c $(lsblk_SOURCES) $(mcookie_SOURCES) \
++	look.c $(lsblk_SOURCES) $(mcookie_SOURCES) \
+ 	$(namei_SOURCES) rename.c uuidd.c uuidgen.c whereis.c \
+ 	$(wipefs_SOURCES)
+ DIST_SOURCES = $(am__blkid_SOURCES_DIST) \
+ 	$(am__blkid_static_SOURCES_DIST) $(am__cal_SOURCES_DIST) \
+ 	ddate.c findfs.c $(am__findmnt_SOURCES_DIST) \
+-	$(am__kill_SOURCES_DIST) $(logger_SOURCES) look.c \
++	$(am__kill_SOURCES_DIST) look.c \
+ 	$(am__lsblk_SOURCES_DIST) $(mcookie_SOURCES) $(namei_SOURCES) \
+ 	rename.c uuidd.c uuidgen.c whereis.c \
+ 	$(am__wipefs_SOURCES_DIST)
+@@ -281,7 +281,7 @@
+ man8dir = $(mandir)/man8
+ NROFF = nroff
+ MANS = $(dist_man_MANS)
+-am__dist_noinst_DATA_DIST = cal.1 chkdupexe.1 logger.1 look.1 \
++am__dist_noinst_DATA_DIST = cal.1 chkdupexe.1 look.1 \
+ 	mcookie.1 namei.1 whereis.1 ddate.1 uuidgen.1 uuidd.8 blkid.8 \
+ 	findfs.8 wipefs.8 lsblk.8 findmnt.8 kill.1 rename.1
+ DATA = $(dist_noinst_DATA)
+@@ -477,7 +477,7 @@
+ mcookie_SOURCES = mcookie.c $(top_srcdir)/lib/md5.c
+ usrbin_exec_SCRIPTS = chkdupexe
+ CLEANFILES = chkdupexe
+-dist_man_MANS = cal.1 chkdupexe.1 logger.1 look.1 mcookie.1 namei.1 \
++dist_man_MANS = cal.1 chkdupexe.1 look.1 mcookie.1 namei.1 \
+ 	whereis.1 $(am__append_2) $(am__append_4) $(am__append_6) \
+ 	$(am__append_8) $(am__append_10) $(am__append_13) \
+ 	$(am__append_17) $(am__append_19)
+--- ./term-utils/ttymsg.c-1	2011-10-18 14:41:47.000000000 +0900
++++ ./term-utils/ttymsg.c	2014-02-14 12:09:29.726697335 +0900
+@@ -51,6 +51,7 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <stdlib.h>
++#include <sys/param.h>
+ #include "nls.h"
+ 
+ #include "pathnames.h"
+--- ./term-utils/agetty.c-1	2011-10-18 21:22:27.000000000 +0900
++++ ./term-utils/agetty.c	2014-02-14 12:07:56.622698492 +0900
+@@ -42,6 +42,7 @@
+ #ifdef __linux__
+ #  include <sys/kd.h>
+ #  include <sys/param.h>
++#  include <sys/ttydefaults.h>
+ #  define USE_SYSLOG
+ #  ifndef DEFAULT_VCTERM
+ #    define DEFAULT_VCTERM "linux"
+diff -duNr util-linux-2.20.1-prev/fdisk/cfdisk.c util-linux-2.20.1/fdisk/cfdisk.c
+--- util-linux-2.20.1-prev/fdisk/cfdisk.c	2011-09-26 18:50:22.000000000 -0900
++++ util-linux-2.20.1/fdisk/cfdisk.c	2014-03-24 15:10:29.000000000 -0900
+@@ -316,7 +316,7 @@
+ int logical = 0;
+ long long logical_sectors[MAXIMUM_PARTS];
+ 
+-__sighandler_t old_SIGINT, old_SIGTERM;
++sighandler_t old_SIGINT, old_SIGTERM;
+ 
+ int arrow_cursor = FALSE;
+ int display_units = MEGABYTES;
+--- util-linux-2.20.1-prev/term-utils/setterm.c	2011-10-11 22:23:47.000000000 -0900
++++ util-linux-2.20.1/term-utils/setterm.c	2014-03-24 15:15:47.000000000 -0900
+@@ -122,7 +122,7 @@
+ #include "xalloc.h"
+ #include "nls.h"
+ 
+-#if __GNU_LIBRARY__ < 5
++#if defined(__GLIBC__) && __GNU_LIBRARY__ < 5
+ #ifndef __alpha__
+ # include <linux/unistd.h>
+ #define __NR_klogctl __NR_syslog
+--- util-linux-2.20.1-prev/term-utils/ttymsg.c	2014-03-24 15:09:48.000000000 -0900
++++ util-linux-2.20.1/term-utils/ttymsg.c	2014-03-24 15:16:13.000000000 -0900
+@@ -41,6 +41,7 @@
+   */
+ 
+ #include <sys/types.h>
++#include <sys/param.h>
+ #include <sys/uio.h>
+ #include <signal.h>
+ #include <fcntl.h>
+--- util-linux-2.20.1-prev/text-utils/hexdump.h	2014-03-24 15:09:48.000000000 -0900
++++ util-linux-2.20.1/text-utils/hexdump.h	2014-03-24 15:16:53.000000000 -0900
+@@ -33,8 +33,7 @@
+  *	@(#)hexdump.h	5.4 (Berkeley) 6/1/90
+  */
+ 
+-typedef unsigned char u_char;
+-
++#include <sys/types.h>
+ typedef struct _pr {
+ 	struct _pr *nextpr;		/* next print unit */
+ #define	F_ADDRESS	0x001		/* print offset */
+--- util-linux-2.20.1-prev/text-utils/pg.c	2011-10-11 22:23:48.000000000 -0900
++++ util-linux-2.20.1/text-utils/pg.c	2014-03-24 15:17:12.000000000 -0900
+@@ -37,7 +37,7 @@
+ #ifndef	TIOCGWINSZ
+ #include <sys/ioctl.h>
+ #endif
+-#include <sys/termios.h>
++#include <termios.h>
+ #include <fcntl.h>
+ #include <regex.h>
+ #include <stdio.h>
+--- util-linux-2.20.1-prev/text-utils/more.c	2011-09-26 18:50:25.000000000 -0900
++++ util-linux-2.20.1/text-utils/more.c	2014-03-24 15:31:33.000000000 -0900
+@@ -1582,20 +1582,23 @@
+     register long line3 = startline;
+     register int lncount;
+     int saveln, rv;
+-    char *s;
++    regex_t re;
+ 
+     context.line = saveln = Currline;
+     context.chrctr = startline;
+     lncount = 0;
+-    if ((s = re_comp (buf)) != 0)
+-	error (s);
++    if ((rv = regcomp(&re, buf, REG_NOSUB)) != 0) {         
++	char s[NUM_COLUMNS];                              
++	regerror(rv, &re, s, sizeof s);                  
++	error(s);                                        
++    }
+     while (!feof (file)) {
+ 	line3 = line2;
+ 	line2 = line1;
+ 	line1 = Ftell (file);
+ 	rdline (file);
+ 	lncount++;
+-	if ((rv = re_exec (Line)) == 1) {
++	if (regexec(&re, Line, 0, NULL, 0) == 0) {
+ 		if (--n == 0) {
+ 		    if (lncount > 3 || (lncount > 1 && no_intty))
+ 		    {
+--- util-linux-2.20.1-2/libuuid/src/Makefile.in	2011-10-20 17:37:30.000000000 -0900
++++ util-linux-2.20.1/libuuid/src/Makefile.in	2014-03-25 11:31:46.000000000 -0900
+@@ -701,8 +701,8 @@
+ 	if test "$(usrlib_execdir)" != "$(libdir)"; then \
+ 		mkdir -p $(DESTDIR)$(libdir); \
+ 		mv $(DESTDIR)$(usrlib_execdir)/libuuid.so.* $(DESTDIR)$(libdir); \
+-		so_img_name=$$(readlink $(DESTDIR)$(usrlib_execdir)/libuuid.so); \
+-		so_img_rel_target=$$(echo $(usrlib_execdir) | sed 's,\(^/\|\)[^/][^/]*,..,g'); \
++		so_img_name=`readlink $(DESTDIR)$(usrlib_execdir)/libuuid.so`; \
++		so_img_rel_target=`echo $(usrlib_execdir) | sed 's,\(^/\|\)[^/][^/]*,..,g'`; \
+ 		(cd $(DESTDIR)$(usrlib_execdir) && \
+ 			rm -f libuuid.so && \
+ 			$(LN_S) $$so_img_rel_target$(libdir)/$$so_img_name libuuid.so); \
+--- util-linux-2.20.1-2/libblkid/src/Makefile.in	2011-10-20 17:37:29.000000000 -0900
++++ util-linux-2.20.1/libblkid/src/Makefile.in	2014-03-25 11:32:58.000000000 -0900
+@@ -957,8 +957,8 @@
+ 	if test "$(usrlib_execdir)" != "$(libdir)"; then \
+ 		mkdir -p $(DESTDIR)$(libdir); \
+ 		mv $(DESTDIR)$(usrlib_execdir)/libblkid.so.* $(DESTDIR)$(libdir); \
+-		so_img_name=$$(readlink $(DESTDIR)$(usrlib_execdir)/libblkid.so); \
+-		so_img_rel_target=$$(echo $(usrlib_execdir) | sed 's,\(^/\|\)[^/][^/]*,..,g'); \
++		so_img_name=`readlink $(DESTDIR)$(usrlib_execdir)/libblkid.so`; \
++		so_img_rel_target=`echo $(usrlib_execdir) | sed 's,\(^/\|\)[^/][^/]*,..,g'`; \
+ 		(cd $(DESTDIR)$(usrlib_execdir) && \
+ 			rm -f libblkid.so && \
+ 			$(LN_S) $$so_img_rel_target$(libdir)/$$so_img_name libblkid.so); \
+--- util-linux-2.20.1-2/libmount/src/Makefile.in	2011-10-20 17:37:30.000000000 -0900
++++ util-linux-2.20.1/libmount/src/Makefile.in	2014-03-25 11:33:31.000000000 -0900
+@@ -788,8 +788,8 @@
+ 	if test "$(usrlib_execdir)" != "$(libdir)"; then \
+ 		mkdir -p $(DESTDIR)$(libdir); \
+ 		mv $(DESTDIR)$(usrlib_execdir)/libmount.so.* $(DESTDIR)$(libdir); \
+-		so_img_name=$$(readlink $(DESTDIR)$(usrlib_execdir)/libmount.so); \
+-		so_img_rel_target=$$(echo $(usrlib_execdir) | sed 's,\(^/\|\)[^/][^/]*,..,g'); \
++		so_img_name=`readlink $(DESTDIR)$(usrlib_execdir)/libmount.so`; \
++		so_img_rel_target=`echo $(usrlib_execdir) | sed 's,\(^/\|\)[^/][^/]*,..,g'`; \
+ 		(cd $(DESTDIR)$(usrlib_execdir) && \
+ 			rm -f libmount.so && \
+ 			$(LN_S) $$so_img_rel_target$(libdir)/$$so_img_name libmount.so); \
