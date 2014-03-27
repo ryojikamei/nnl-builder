@@ -1,0 +1,14 @@
+*.swp
+*-bak
+*-bak2
+*-bak3
+*-bak4
+*-add
+*-prev
+/build/*
+/packages/*
+/sources/*/*tar*
+/sources/*/*zip*
+/sources/strace
+/sources/bash/bash-4.2-patches/*
+/tmp

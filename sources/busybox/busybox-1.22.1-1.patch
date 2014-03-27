@@ -1,0 +1,21 @@
+--- busybox-1.22.1/networking/ifplugd.c
++++ busybox-1.22.1-musl/networking/ifplugd.c
+@@ -37,9 +37,6 @@
+ #include <linux/if.h>
+ #include <linux/mii.h>
+ #include <linux/ethtool.h>
+-#ifdef HAVE_NET_ETHERNET_H
+-# include <net/ethernet.h>
+-#endif
+ #include <linux/netlink.h>
+ #include <linux/rtnetlink.h>
+ #include <linux/sockios.h>
+--- busybox-1.22.1/scripts/gcc-version.sh-1	2014-01-10 03:15:44.000000000 -0900
++++ busybox-1.22.1/scripts/gcc-version.sh	2014-03-26 13:49:09.000000000 -0900
+@@ -8,5 +8,5 @@
+ 
+ compiler="$*"
+ 
+-MAJ_MIN=$(echo __GNUC__ __GNUC_MINOR__ | $compiler -E -xc - | tail -n 1)
++MAJ_MIN=`echo __GNUC__ __GNUC_MINOR__ | $compiler -E -xc - | tail -n 1`
+ printf '%02d%02d\n' $MAJ_MIN

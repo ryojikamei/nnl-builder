@@ -1,0 +1,184 @@
+From 7586360badcae6e73f04eb1b8189ce630281c4b2 Mon Sep 17 00:00:00 2001
+From: Rich Felker <dalias@aerifal.cx>
+Date: Sun, 21 Jul 2013 07:00:54 +0000
+Subject: add support for init/fini array in main program, and greatly simplify
+
+modern (4.7.x and later) gcc uses init/fini arrays, rather than the
+legacy _init/_fini function pasting and crtbegin/crtend ctors/dtors
+system, on most or all archs. some archs had already switched a long
+time ago. without following this change, global ctors/dtors will cease
+to work under musl when building with new gcc versions.
+
+the most surprising part of this patch is that it actually reduces the
+size of the init code, for both static and shared libc. this is
+achieved by (1) unifying the handling main program and shared
+libraries in the dynamic linker, and (2) eliminating the
+glibc-inspired rube goldberg machine for passing around init and fini
+function pointers. to clarify, some background:
+
+the function signature for __libc_start_main was based on glibc, as
+part of the original goal of being able to run some glibc-linked
+binaries. it worked by having the crt1 code, which is linked into
+every application, static or dynamic, obtain and pass pointers to the
+init and fini functions, which __libc_start_main is then responsible
+for using and recording for later use, as necessary. however, in
+neither the static-linked nor dynamic-linked case do we actually need
+crt1.o's help. with dynamic linking, all the pointers are available in
+the _DYNAMIC block. with static linking, it's safe to simply access
+the _init/_fini and __init_array_start, etc. symbols directly.
+
+obviously changing the __libc_start_main function signature in an
+incompatible way would break both old musl-linked programs and
+glibc-linked programs, so let's not do that. instead, the function can
+just ignore the information it doesn't need. new archs need not even
+provide the useless args in their versions of crt1.o. existing archs
+should continue to provide it as long as there is an interest in
+having newly-linked applications be able to run on old versions of
+musl; at some point in the future, this support can be removed.
+---
+diff --git a/src/env/__libc_start_main.c b/src/env/__libc_start_main.c
+index aef9f9e..2a8698b 100644
+--- a/src/env/__libc_start_main.c
++++ b/src/env/__libc_start_main.c
+@@ -5,6 +5,13 @@ void __init_tls(size_t *);
+ void __init_security(size_t *);
+ void __init_ldso_ctors(void);
+ 
++#ifndef SHARED
++static void dummy() {}
++weak_alias(dummy, _init);
++extern void (*const __init_array_start)() __attribute__((weak));
++extern void (*const __init_array_end)() __attribute__((weak));
++#endif
++
+ #define AUX_CNT 38
+ 
+ extern size_t __hwcap, __sysinfo;
+@@ -29,23 +36,16 @@ void __init_libc(char **envp, char *pn)
+ 	__init_security(aux);
+ }
+ 
+-int __libc_start_main(
+-	int (*main)(int, char **, char **), int argc, char **argv,
+-	int (*init)(int, char **, char **), void (*fini)(void),
+-	void (*ldso_fini)(void))
++int __libc_start_main(int (*main)(int,char **,char **), int argc, char **argv)
+ {
+ 	char **envp = argv+argc+1;
+ 
++#ifndef SHARED
+ 	__init_libc(envp, argv[0]);
+-
+-	libc.ldso_fini = ldso_fini;
+-	libc.fini = fini;
+-
+-	/* Execute constructors (static) linked into the application */
+-	if (init) init(argc, argv, envp);
+-
+-#ifdef SHARED
+-	__init_ldso_ctors();
++	_init();
++	uintptr_t a = (uintptr_t)&__init_array_start;
++	for (; a<(uintptr_t)&__init_array_end; a+=sizeof(void(*)()))
++		(*(void (**)())a)();
+ #endif
+ 
+ 	/* Pass control to to application */
+diff --git a/src/exit/exit.c b/src/exit/exit.c
+index e4932b5..f259c98 100644
+--- a/src/exit/exit.c
++++ b/src/exit/exit.c
+@@ -14,6 +14,12 @@ weak_alias(dummy, __funcs_on_exit);
+ weak_alias(dummy, __flush_on_exit);
+ weak_alias(dummy, __seek_on_exit);
+ 
++#ifndef SHARED
++weak_alias(dummy, _fini);
++extern void (*const __fini_array_start)() __attribute__((weak));
++extern void (*const __fini_array_end)() __attribute__((weak));
++#endif
++
+ _Noreturn void exit(int code)
+ {
+ 	static int lock;
+@@ -22,8 +28,14 @@ _Noreturn void exit(int code)
+ 	while (a_swap(&lock, 1)) __syscall(SYS_pause);
+ 
+ 	__funcs_on_exit();
+-	if (libc.fini) libc.fini();
+-	if (libc.ldso_fini) libc.ldso_fini();
++
++#ifndef SHARED
++	uintptr_t a = (uintptr_t)&__fini_array_end;
++	for (; a>(uintptr_t)&__fini_array_start; a-=sizeof(void(*)()))
++		(*(void (**)())(a-sizeof(void(*)())))();
++	_fini();
++#endif
++
+ 	__flush_on_exit();
+ 	__seek_on_exit();
+ 
+diff --git a/src/internal/libc.h b/src/internal/libc.h
+index c9416f0..c8fbe3f 100644
+--- a/src/internal/libc.h
++++ b/src/internal/libc.h
+@@ -9,9 +9,6 @@ struct __libc {
+ 	int threaded;
+ 	int secure;
+ 	size_t *auxv;
+-	int (*atexit)(void (*)(void));
+-	void (*fini)(void);
+-	void (*ldso_fini)(void);
+ 	volatile int threads_minus_1;
+ 	int canceldisable;
+ 	FILE *ofl_head;
+diff --git a/src/ldso/dynlink.c b/src/ldso/dynlink.c
+index 829696f..3a0bf95 100644
+--- a/src/ldso/dynlink.c
++++ b/src/ldso/dynlink.c
+@@ -91,6 +91,7 @@ struct symdef {
+ 
+ void __init_ssp(size_t *);
+ void *__install_initial_tls(void *);
++void __init_libc(char **, char *);
+ 
+ static struct dso *head, *tail, *ldso, *fini_head;
+ static char *env_path, *sys_path, *r_path;
+@@ -841,6 +842,7 @@ void *__dynlink(int argc, char **argv)
+ 	char *env_preload=0;
+ 	size_t vdso_base;
+ 	size_t *auxv;
++	char **envp = argv+argc+1;
+ 
+ 	/* Find aux vector just past environ[] */
+ 	for (i=argc+1; argv[i]; i++)
+@@ -953,7 +955,6 @@ void *__dynlink(int argc, char **argv)
+ 		tls_align = MAXP2(tls_align, app->tls_align);
+ 	}
+ 	app->global = 1;
+-	app->constructed = 1;
+ 	decode_dyn(app);
+ 
+ 	/* Attach to vdso, if provided by the kernel */
+@@ -1038,15 +1039,12 @@ void *__dynlink(int argc, char **argv)
+ 	_dl_debug_state();
+ 
+ 	if (ssp_used) __init_ssp((void *)aux[AT_RANDOM]);
+-
+-	errno = 0;
+-	return (void *)aux[AT_ENTRY];
+-}
+-
+-void __init_ldso_ctors(void)
+-{
++	__init_libc(envp, argv[0]);
+ 	atexit(do_fini);
++	errno = 0;
+ 	do_init_fini(tail);
++
++	return (void *)aux[AT_ENTRY];
+ }
+ 
+ void *dlopen(const char *file, int mode)
+--
+cgit v0.9.0.3-65-g4555

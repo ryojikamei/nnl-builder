@@ -1,0 +1,4 @@
+Package:	opkg
+Version:	0.2.1-1
+Architecture:	i486
+Depends:

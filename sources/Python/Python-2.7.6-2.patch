@@ -1,0 +1,13 @@
+Index: Lib/site.py
+===================================================================
+--- Python-2.7.6-prev/Lib/site.py	(revision 79298)
++++ Python-2.7.6/Lib/site.py	(working copy)
+@@ -118,7 +118,7 @@
+     s = "build/lib.%s-%.3s" % (get_platform(), sys.version)
+     if hasattr(sys, 'gettotalrefcount'):
+         s += '-pydebug'
++    s = os.path.join(os.path.dirname(sys.path[-1]), s)
+-    s = os.path.join(os.path.dirname(sys.path.pop()), s)
+     sys.path.append(s)
+ 
+ 

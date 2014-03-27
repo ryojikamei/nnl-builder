@@ -1,0 +1,6 @@
+/var/run/utmp
+/var/log/lastlog
+/etc/mdev.conf
+/etc/inittab
+/etc/HOSTNAME
+/etc/hosts

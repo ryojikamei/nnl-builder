@@ -1,0 +1,4 @@
+Package:	linux
+Version:	3.2.55
+Architecture:	i486
+Depends:
