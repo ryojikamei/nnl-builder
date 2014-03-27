@@ -18,7 +18,7 @@ tar xf $SOURCE_DIR/$NAME.$VER.*tar* && cd $BUILD_DIR
 sed -i -e "s/-Os/$OPKG_OPTFLAGS/g;" Makefile
 
 #BUILD
-make && make PREFIX=$OPKG_WORK_BUILD/$INSTALL_DIR/usr install
+make $OPKG_MAKEFLAGS && make PREFIX=$OPKG_WORK_BUILD/$INSTALL_DIR/usr install
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
 	exit 1
