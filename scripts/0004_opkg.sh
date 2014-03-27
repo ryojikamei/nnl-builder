@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=opkg
 VER=0.2.1
-REL=4
+REL=5
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -26,6 +26,8 @@ if [ $? -ne 0 ]; then
 fi
 
 #PACK
+mkdir -p $OPKG_WORK_BUILD/$INSTALL_DIR/usr/lib/opkg/info
+mkdir -p $OPKG_WORK_BUILD/$INSTALL_DIR/usr/lib/opkg/lists
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2
