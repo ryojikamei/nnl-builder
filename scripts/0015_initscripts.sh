@@ -17,16 +17,21 @@ rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME-$VER.*tar*
 tar xf $SOURCE_DIR/bootscripts-embedded-HEAD.tar.gz
 
+
 #BUILD
 rm -rf $INSTALL_DIR
 mkdir $INSTALL_DIR
-mv $BUILD_DIR/* $INSTALL_DIR
-
+mv $BUILD_DIR/* $INSTALL_DIR && \
 make -C $OPKG_WORK_BUILD/bootscripts-embedded \
 	DESTDIR=$INSTALL_DIR install-bootscripts
-	
+if [ $? -ne 0 ]; then
+	echo "ERROR:	packaging in $NAME-$VER" >&2
+	exit 1
+fi
+
 
 #PACK
+cd $OPKG_WORK_BUILD
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2
@@ -36,7 +41,7 @@ fi
 
 #CLEAN
 cd  $OPKG_WORK_BUILD
-#rm -rf  $BUILD_DIR $INSTALL_DIR $NAME-build
+rm -rf  $BUILD_DIR $INSTALL_DIR $NAME-build
 
 
 #FINISH

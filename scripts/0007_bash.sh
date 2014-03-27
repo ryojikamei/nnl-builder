@@ -20,6 +20,7 @@ for p in `ls -1 $SOURCE_DIR/$NAME-$VER-patches/*` ; do
 done
 sed -i -e 's/linux-newlib/linux-musl/g;' support/config.sub
 
+
 #BUILD
 CONFIG_ADD=" --prefix=/ --without-bash-malloc"
 
@@ -28,9 +29,11 @@ if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
 	exit 1
 fi
-rm -rf $OPKG_WORK_BUILD/$INSTALL_DIR/share
+
 
 #PACK
+cd $OPKG_WORK_BUILD
+rm -rf $INSTALL_DIR/share
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2

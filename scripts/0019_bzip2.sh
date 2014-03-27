@@ -20,18 +20,15 @@ tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
 #BUILD
 grep -v "^CFLAGS=" Makefile > Makefile.1
 grep -v "^PREFIX=" Makefile.1 > Makefile
-CFLAGS="$OPKG_OPTFLAGS -D_FILE_OFFSET_BITS=64" make $OPKG_MAKEFLAGS
+CFLAGS="$OPKG_OPTFLAGS -D_FILE_OFFSET_BITS=64" make $OPKG_MAKEFLAGS && \
 PREFIX=$OPKG_WORK_BUILD/$INSTALL_DIR/usr make install
+if [ $? -ne 0 ]; then
+	echo "ERROR:	building in $NAME-$VER" >&2
+	exit 1
 
-#CONFIG_ADD=""
-
-#$OPKG_HELPER/gnu-build.sh $NAME $VER $BUILD_DIR $INSTALL_DIR "$CONFIG_ADD"
-#if [ $? -ne 0 ]; then
-#	echo "ERROR:	building in $NAME-$VER" >&2
-#	exit 1
-#fi
 
 #PACK
+cd $OPKG_WORK_BUILD
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2

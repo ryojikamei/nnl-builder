@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=filesystem
 VER=1.0
-REL=2
+REL=3
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -28,12 +28,13 @@ mkdir -p usr/local && cd usr && mkdir bin include lib sbin share src \
 && cd local && mkdir bin include lib sbin share src && cd ../..
 
 #PACK
+cd $OPKG_WORK_BUILD
 cp -av $SOURCE_DIR/CONTROL $OPKG_WORK_BUILD/$INSTALL_DIR/
 DEPENDS=`grep ^Depends: $SOURCE_DIR/CONTROL/control`
 cat > $SOURCE_DIR/CONTROL/control <<EOF
 Package:	$NAME
 Version:	$VER-$REL
-Architecture:	$OPKG_CTRL_ARCH
+Architecture:	noarch
 $DEPENDS
 EOF
 opkg-build -C -O $OPKG_WORK_BUILD/$INSTALL_DIR $OPKG_WORK_PKGS

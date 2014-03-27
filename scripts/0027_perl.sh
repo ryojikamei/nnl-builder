@@ -20,6 +20,7 @@ sed -i -e "s|BUILD_ZLIB\s*= True|BUILD_ZLIB = False|" \
 	-e "s|LIB\s*= ./zlib-src|LIB        = /usr/lib|" \
 	cpan/Compress-Raw-Zlib/config.in
 
+
 #BUILD
 ash Configure -des -Dprefix=/usr \
 	-Dvendorprefix=/usr \
@@ -29,14 +30,16 @@ ash Configure -des -Dprefix=/usr \
 	-Doptimize="$OPKG_OPTFLAGS" \
 	-Dcc=gcc \
 	-Darchname=$OPKG_TARGET \
-	-Duseshrplib
+	-Duseshrplib && \
 make $OPKG_MAKEFLAGS && make DESTDIR=$OPKG_WORK_BUILD/$INSTALL_DIR install
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
 	exit 1
 fi
 
+
 #PACK
+cd $OPKG_WORK_BUILD
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2

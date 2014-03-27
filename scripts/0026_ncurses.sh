@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=ncurses
 VER=5.9
-REL=2
+REL=3
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -27,15 +27,18 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+
 #PACK
+cd $OPKG_WORK_BUILD
 for w in `ls -1 $OPKG_WORK_BUILD/$INSTALL_DIR/lib/*w.so`; do
 	wl=`basename $w`
 	bn=`basename $w w.so`
 	ln -s /lib/$wl $OPKG_WORK_BUILD/$INSTALL_DIR/lib/$bn.so
 done
 for w in `ls -1 $OPKG_WORK_BUILD/$INSTALL_DIR/lib/*w.a`; do
+	wl=`basename $w`
 	bn=`basename $w w.a`
-	ln -s /lib/$w $OPKG_WORK_BUILD/$INSTALL_DIR/lib/$bn.a
+	ln -s /lib/$wl $OPKG_WORK_BUILD/$INSTALL_DIR/lib/$bn.a
 done
 ln -s /usr/bin/ncursesw5-config \
 	$OPKG_WORK_BUILD/$INSTALL_DIR/usr/bin/ncurses5-config

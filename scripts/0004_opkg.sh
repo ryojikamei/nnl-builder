@@ -26,8 +26,9 @@ if [ $? -ne 0 ]; then
 fi
 
 #PACK
-mkdir -p $OPKG_WORK_BUILD/$INSTALL_DIR/usr/lib/opkg/info
-mkdir -p $OPKG_WORK_BUILD/$INSTALL_DIR/usr/lib/opkg/lists
+cd $OPKG_WORK_BUILD
+mkdir -p $OPKG_WORK_BUILD/$INSTALL_DIR/usr/lib/opkg/info && \
+mkdir -p $OPKG_WORK_BUILD/$INSTALL_DIR/usr/lib/opkg/lists && \
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2

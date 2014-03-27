@@ -31,7 +31,6 @@ mkdir -v $OPKG_WORK_BUILD/$NAME-build
 CONFIG_ADD=" --disable-libmudflap --enable-languages=c,c++ \
 	--enable-c99 --enable-long-long"
 
-
 $OPKG_HELPER/gnu-build.sh $NAME $VER $BUILD_DIR $INSTALL_DIR "$CONFIG_ADD"
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
@@ -39,8 +38,9 @@ if [ $? -ne 0 ]; then
 fi
 
 #PACK
-rm -fv $OPKG_WORK_BUILD/$INSTALL_DIR/usr/lib/libiberty.a
-rm -fv $OPKG_WORK_BUILD/$INSTALL_DIR/usr/bin/*-linux-musl-*
+cd $OPKG_WORK_BUILD
+rm -fv $INSTALL_DIR/usr/lib/libiberty.a && \
+rm -fv $INSTALL_DIR/usr/bin/*-linux-musl-* && \
 # --strip-unneeded has problem in perl or python
 STRIP_BIN="strip --strip-debug" $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
