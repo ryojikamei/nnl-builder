@@ -29,8 +29,9 @@ fi
 
 #PACK
 for w in `ls -1 $OPKG_WORK_BUILD/$INSTALL_DIR/lib/*w.so`; do
+	wl=`basename $w`
 	bn=`basename $w w.so`
-	ln -s /lib/$w $OPKG_WORK_BUILD/$INSTALL_DIR/lib/$bn.so
+	ln -s /lib/$wl $OPKG_WORK_BUILD/$INSTALL_DIR/lib/$bn.so
 done
 for w in `ls -1 $OPKG_WORK_BUILD/$INSTALL_DIR/lib/*w.a`; do
 	bn=`basename $w w.a`

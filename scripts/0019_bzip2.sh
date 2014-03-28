@@ -20,7 +20,7 @@ tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
 #BUILD
 grep -v "^CFLAGS=" Makefile > Makefile.1
 grep -v "^PREFIX=" Makefile.1 > Makefile
-CFLAGS="$OPKG_OPTFLAGS -D_FILE_OFFSET_BITS=64" make
+CFLAGS="$OPKG_OPTFLAGS -D_FILE_OFFSET_BITS=64" make $OPKG_MAKEFLAGS
 PREFIX=$OPKG_WORK_BUILD/$INSTALL_DIR/usr make install
 
 #CONFIG_ADD=""
