@@ -39,14 +39,9 @@ if [ $? -ne 0 ]; then
 fi
 
 #PACK
-<<<<<<< HEAD
-rm -fv $OPKG_WORK_BUILD/$INSTALL_DIR/usr/lib/libiberty.a
-rm -fv $OPKG_WORK_BUILD/$INSTALL_DIR/usr/bin/*-linux-musl-*
-=======
 cd $OPKG_WORK_BUILD
 rm -fv $INSTALL_DIR/usr/lib/libiberty.a && \
 rm -fv $INSTALL_DIR/usr/bin/*-linux-musl-* && \
->>>>>>> 5d0b1f74be54c44916a86cbac3616d5409ced4fc
 # --strip-unneeded has problem in perl or python
 STRIP_BIN="strip --strip-debug" $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
