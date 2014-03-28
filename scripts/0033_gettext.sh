@@ -15,7 +15,6 @@ SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
-#patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
 sed -i -e 's/linux-newlib/linux-musl/g;' build-aux/config.sub
 
 #BUILD
@@ -28,7 +27,9 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+
 #PACK
+cd $OPKG_WORK_BUILD
 mv $OPKG_WORK_BUILD/$INSTALL_DIR/usr/include/libintl.h \
 	$OPKG_WORK_BUILD/$INSTALL_DIR/usr/include/libintl-libintl.h
 

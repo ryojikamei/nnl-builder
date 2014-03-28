@@ -19,9 +19,9 @@ patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
 
 
 #BUILD
-make mrproper
-cp -a $SOURCE_DIR/$NAME-$VER.config .config
-make oldconfig
+make mrproper && \
+cp -a $SOURCE_DIR/$NAME-$VER.config .config && \
+make oldconfig && \
 make $OPKG_MAKEFLAGS ARCH=$OPKG_ARCH all  && \
 mkdir -p $OPKG_WORK_BUILD/$INSTALL_DIR/boot && \
 make ARCH=$OPKG_ARCH \
@@ -36,6 +36,7 @@ if [ $? -ne 0 ]; then
 fi
 
 #PACK
+cd $OPKG_WORK_BUILD
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2

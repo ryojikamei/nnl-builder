@@ -23,14 +23,15 @@ CONFIG_ADD=""
 export CFLAGS="$OPKG_OPTFLAGS"
 export CXXFLAGS="$OPKG_OPTFLAGS"
 export FFLAGS="$OPKG_OPTFLAGS"
-make $OPKG_MAKEFLAGS
+make $OPKG_MAKEFLAGS && make INSTALLROOT=$OPKG_WORK_BUILD/$INSTALL_DIR install
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
 	exit 1
 fi
-make INSTALLROOT=$OPKG_WORK_BUILD/$INSTALL_DIR install
+
 
 #PACK
+cd $OPKG_WORK_BUILD
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2

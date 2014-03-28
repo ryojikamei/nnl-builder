@@ -17,6 +17,7 @@ rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME.$VER.*tar* && cd $BUILD_DIR
 sed -i -e "s/-Os/$OPKG_OPTFLAGS/g;" Makefile
 
+
 #BUILD
 make $OPKG_MAKEFLAGS && make PREFIX=$OPKG_WORK_BUILD/$INSTALL_DIR/usr install
 if [ $? -ne 0 ]; then
@@ -24,7 +25,9 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+
 #PACK
+cd $OPKG_WORK_BUILD
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2

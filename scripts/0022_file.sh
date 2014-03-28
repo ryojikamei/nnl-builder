@@ -15,7 +15,6 @@ SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
-#patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
 sed -i -e 's/linux-newlib/linux-musl/g;' config.sub
 
 
@@ -29,6 +28,7 @@ if [ $? -ne 0 ]; then
 fi
 
 #PACK
+cd $OPKG_WORK_BUILD
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2

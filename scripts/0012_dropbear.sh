@@ -15,7 +15,7 @@ SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
-#patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
+
 
 #BUILD
 CONFIG_ADD=""
@@ -27,7 +27,8 @@ if [ $? -ne 0 ]; then
 fi
 
 #PACK
-mkdir -pv $OPKG_WORK_BUILD/$INSTALL_DIR/etc/$NAME
+cd $OPKG_WORK_BUILD
+mkdir -pv $INSTALL_DIR/etc/$NAME && \
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2
@@ -37,7 +38,7 @@ fi
 
 #CLEAN
 cd  $OPKG_WORK_BUILD
-#rm -rf  $BUILD_DIR $INSTALL_DIR $NAME-build
+rm -rf  $BUILD_DIR $INSTALL_DIR $NAME-build
 
 
 #FINISH

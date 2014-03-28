@@ -25,12 +25,13 @@ if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
 	exit 1
 fi
-if [ ! -f $OPKG_WORK_BUILD/$INSTALL_DIR/usr/bin/yacc ]; then
-	mv $OPKG_WORK_BUILD/$INSTALL_DIR/usr/bin/*yacc \
-	$OPKG_WORK_BUILD/$INSTALL_DIR/usr/bin/yacc
-fi
+
 
 #PACK
+cd $OPKG_WORK_BUILD
+if [ ! -f $INSTALL_DIR/usr/bin/yacc ]; then
+	mv $INSTALL_DIR/usr/bin/*yacc $INSTALL_DIR/usr/bin/yacc
+fi
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2

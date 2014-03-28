@@ -28,7 +28,9 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+
 #PACK
+cd $OPKG_WORK_BUILD
 mkdir -p $OPKG_WORK_BUILD/$INSTALL_DIR/usr/sbin \
 	$OPKG_WORK_BUILD/$INSTALL_DIR/usr/bin && \
 mv $OPKG_WORK_BUILD/$INSTALL_DIR/sbin/* \

@@ -15,7 +15,6 @@ SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
-
 patch -Np1 -R -i $SOURCE_DIR/$NAME-$VER-gcc4.6.patch
 
 
@@ -30,10 +29,9 @@ fi
 
 #PACK
 cd $OPKG_WORK_BUILD
-mkdir -p $INSTALL_DIR/bin
-ln -s /lib/ld-musl-i386.so.1 $INSTALL_DIR/bin/ldd
-mkdir -p $INSTALL_DIR/usr/lib
-
+mkdir -p $INSTALL_DIR/bin && \
+ln -s /lib/ld-musl-i386.so.1 $INSTALL_DIR/bin/ldd && \
+mkdir -p $INSTALL_DIR/usr/lib && \
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2

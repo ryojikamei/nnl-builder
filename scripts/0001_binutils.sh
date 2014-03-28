@@ -30,7 +30,8 @@ if [ $? -ne 0 ]; then
 fi
 
 #PACK
-rm -rf $OPKG_WORK_BUILD/$INSTALL_DIR/usr/*-linux-musl
+cd $OPKG_WORK_BUILD
+rm -rf $INSTALL_DIR/usr/*-linux-musl && \
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2
