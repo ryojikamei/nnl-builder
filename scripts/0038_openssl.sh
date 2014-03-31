@@ -22,7 +22,7 @@ patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
 CONFIG_ADD=""
 
 ./config --prefix=/usr --openssldir=/usr/lib/openssl zlib shared no-sse2 \
-&& make $OPKG_MAKEFLAGS && \
+&& make && \
 make INSTALL_PREFIX=$OPKG_WORK_BUILD/$INSTALL_DIR install
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
