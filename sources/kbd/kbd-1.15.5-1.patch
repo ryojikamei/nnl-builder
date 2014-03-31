@@ -1,0 +1,173 @@
+diff -duNr kbd-1.15.5-vanilla/src/dumpkeys.c kbd-1.15.5/src/dumpkeys.c
+--- kbd-1.15.5-vanilla/src/dumpkeys.c	2012-12-02 06:41:38.000000000 -0900
++++ kbd-1.15.5/src/dumpkeys.c	2014-03-28 14:28:42.000000000 -0900
+@@ -8,6 +8,7 @@
+ #include <ctype.h>
+ #include <fcntl.h>
+ #include <getopt.h>
++#include <sys/types.h>
+ #include <linux/types.h>
+ #include <linux/kd.h>
+ #include <linux/keyboard.h>
+diff -duNr kbd-1.15.5-vanilla/src/kbdinfo.c kbd-1.15.5/src/kbdinfo.c
+--- kbd-1.15.5-vanilla/src/kbdinfo.c	2012-12-02 06:41:38.000000000 -0900
++++ kbd-1.15.5/src/kbdinfo.c	2014-03-28 15:24:47.000000000 -0900
+@@ -1,6 +1,6 @@
+ #include <stdio.h>
+ #include <errno.h>
+-#include <error.h>
++#include <err.h>
+ #include <unistd.h>
+ #include <sys/ioctl.h>
+ #include <linux/kd.h>
+@@ -75,7 +75,7 @@
+ 
+ 	if (!strcasecmp("GETMODE", action)) {
+ 		if (ioctl(fd, KDGETMODE, &mode) == -1)
+-			error(EXIT_FAILURE, errno, "ioctl");
++			err(EXIT_FAILURE, "ioctl");
+ 
+ 		switch (mode) {
+ 			case KD_TEXT:		rc = answer("text");		break;
+@@ -84,7 +84,7 @@
+ 
+ 	} else if (!strcasecmp("GKBMODE", action)) {
+ 		if (ioctl(fd, KDGKBMODE, &mode) == -1)
+-			error(EXIT_FAILURE, errno, "ioctl");
++			err(EXIT_FAILURE, "ioctl");
+ 
+ 		switch (mode) {
+ 			case K_RAW:		rc = answer("raw");		break;
+@@ -95,7 +95,7 @@
+ 
+ 	} else if (!strcasecmp("GKBMETA", action)) {
+ 		if (ioctl(fd, KDGKBMETA, &mode) == -1)
+-			error(EXIT_FAILURE, errno, "ioctl");
++			err(EXIT_FAILURE, "ioctl");
+ 
+ 		switch (mode) {
+ 			case K_METABIT:		rc = answer("metabit");		break;
+@@ -104,7 +104,7 @@
+ 
+ 	} else if (!strcasecmp("GKBLED", action)) {
+ 		if (ioctl(fd, KDGKBLED, &flags) == -1)
+-			error(EXIT_FAILURE, errno, "ioctl");
++			err(EXIT_FAILURE, "ioctl");
+ 
+ 		mode = (flags & 0x7);
+ 
+diff -duNr kbd-1.15.5-vanilla/src/kbdrate.c kbd-1.15.5/src/kbdrate.c
+--- kbd-1.15.5-vanilla/src/kbdrate.c	2012-12-02 06:41:38.000000000 -0900
++++ kbd-1.15.5/src/kbdrate.c	2014-03-28 15:06:33.000000000 -0900
+@@ -74,6 +74,7 @@
+ #include <errno.h>
+ #include <sys/file.h>
+ #include <sys/ioctl.h>
++#include <fcntl.h>
+ 
+ #ifdef __sparc__
+ #include <asm/param.h>
+diff -duNr kbd-1.15.5-vanilla/src/loadkeys.y kbd-1.15.5/src/loadkeys.y
+--- kbd-1.15.5-vanilla/src/loadkeys.y	2012-12-02 06:41:38.000000000 -0900
++++ kbd-1.15.5/src/loadkeys.y	2014-03-28 14:28:42.000000000 -0900
+@@ -20,6 +20,7 @@
+ #include <string.h>
+ #include <fcntl.h>
+ #include <ctype.h>
++#include <sys/types.h>
+ #include <sys/param.h>
+ #include <sys/ioctl.h>
+ #include <linux/kd.h>
+diff -duNr kbd-1.15.5-vanilla/src/openvt.c kbd-1.15.5/src/openvt.c
+--- kbd-1.15.5-vanilla/src/openvt.c	2012-12-02 06:41:38.000000000 -0900
++++ kbd-1.15.5/src/openvt.c	2014-03-28 15:06:58.000000000 -0900
+@@ -10,6 +10,7 @@
+ #include <sys/vt.h>
+ #include <sys/wait.h>
+ #include <sys/file.h>
++#include <fcntl.h>
+ 
+ #include "version.h"
+ #include "xmalloc.h"
+diff -duNr kbd-1.15.5-vanilla/src/resizecons.c kbd-1.15.5/src/resizecons.c
+--- kbd-1.15.5-vanilla/src/resizecons.c	2012-12-02 06:41:38.000000000 -0900
++++ kbd-1.15.5/src/resizecons.c	2014-03-28 15:30:46.000000000 -0900
+@@ -82,7 +82,6 @@
+ #include <sys/perm.h>
+ #else
+ #include <linux/types.h>
+-#include <linux/termios.h>
+ #endif
+ #include <linux/vt.h>
+ #include "paths.h"
+diff -duNr kbd-1.15.5-vanilla/src/setvtrgb.c kbd-1.15.5/src/setvtrgb.c
+--- kbd-1.15.5-vanilla/src/setvtrgb.c	2012-12-02 06:41:38.000000000 -0900
++++ kbd-1.15.5/src/setvtrgb.c	2014-03-28 15:27:48.000000000 -0900
+@@ -5,7 +5,7 @@
+ #include <sys/ioctl.h>
+ #include <linux/kd.h>
+ #include <errno.h>
+-#include <error.h>
++#include <err.h>
+ #include "kbd.h"
+ #include "getfd.h"
+ #include "nls.h"
+@@ -60,7 +60,7 @@
+ 
+ 	/* Apply the color map to the tty via ioctl */
+ 	if (ioctl(fd, PIO_CMAP, colormap) == -1)
+-		error(EXIT_FAILURE, errno, "ioctl");
++		err(EXIT_FAILURE, "ioctl");
+ 
+ 	close(fd);
+ }
+@@ -72,7 +72,7 @@
+ 	unsigned int rows, cols, val;
+ 
+ 	if ((cmap = calloc(3 * 16, sizeof(unsigned char))) == NULL)
+-		error(EXIT_FAILURE, errno, "calloc");
++		err(EXIT_FAILURE, "calloc");
+ 
+ 	for (rows = 0; rows < 3; rows++) {
+ 		cols = 0;
+@@ -80,26 +80,26 @@
+ 		while (cols < 16) {
+ 			if ((c = fscanf(fd, "%u", &val)) != 1) {
+ 				if (c == EOF)
+-					error(EXIT_FAILURE, errno, "fscanf");
++					err(EXIT_FAILURE, "fscanf");
+ 
+-				error(EXIT_FAILURE, 0, _("Error: %s: Invalid value in field %u in line %u."),
++				err(EXIT_FAILURE, _("Error: %s: Invalid value in field %u in line %u."),
+ 				      filename, rows + 1, cols + 1);
+ 			}
+ 
+ 			cmap[rows + cols * 3] = (unsigned char) val;
+ 
+ 			if (cols < 15 && fgetc(fd) != ',')
+-				error(EXIT_FAILURE, 0, _("Error: %s: Insufficient number of fields in line %u."),
++				err(EXIT_FAILURE, _("Error: %s: Insufficient number of fields in line %u."),
+ 				      filename, rows + 1);
+ 			cols++;
+ 		}
+ 
+ 		if ((c = fgetc(fd)) == EOF)
+-			error(EXIT_FAILURE, 0, _("Error: %s: Line %u has ended unexpectedly.\n"),
++			err(EXIT_FAILURE, _("Error: %s: Line %u has ended unexpectedly.\n"),
+ 			      filename, rows + 1); 
+ 
+ 		if (c != '\n')
+-			error(EXIT_FAILURE, 0, _("Error: %s: Line %u is too long.\n"),
++			err(EXIT_FAILURE, _("Error: %s: Line %u is too long.\n"),
+ 			      filename, rows + 1);
+ 	}
+ }
+@@ -141,7 +141,7 @@
+ 
+ 	} else {
+ 		if ((fd = fopen(file, "r")) == NULL)
+-			error(EXIT_FAILURE, errno, "fopen");
++			err(EXIT_FAILURE, "fopen");
+ 
+ 		parse_file(fd, file);
+ 		fclose(fd);

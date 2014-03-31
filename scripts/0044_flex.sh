@@ -4,9 +4,9 @@
 source ~/.nnl-builder/settings
 
 #PARAMS
-NAME=byacc
-VER=20140101
-REL=4
+NAME=flex
+VER=2.5.39
+REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -15,6 +15,7 @@ SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
+sed -i -e 's/linux-newlib/linux-musl/g;' config.sub
 
 
 #BUILD
@@ -26,13 +27,8 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-
 #PACK
 cd $OPKG_WORK_BUILD
-if [ ! -f $INSTALL_DIR/usr/bin/yacc ]; then
-	mv $INSTALL_DIR/usr/bin/*yacc $INSTALL_DIR/usr/bin/yacc
-	ln -s yacc $INSTALL_DIR/usr/bin/byacc
-fi
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2
