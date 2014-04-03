@@ -1,24 +1,38 @@
-#!/bin/ash -x
+#!/bin/sh -x
 
 #INIT
 source ~/.nnl-builder/settings
+if [ "`echo $0 | grep cross`" == $0 ]; then
+	INITIAL_CROSS=1
+else
+	INITIAL_CROSS=0
+fi
 
 #PARAMS
 NAME=linux
 VER=3.2.55
-REL=4
+REL=5
 BUILD_DIR=$NAME-$VER
-INSTALL_DIR=$NAME-root
+if [ $INITIAL_CROSS ]; then
+	INSTALL_DIR=../../cross-tool
+else
+	INSTALL_DIR=$NAME-root
+fi
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
 #PREP
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
-patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
+$PATCH -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
 
 
 #BUILD
+if [ $INITIAL_CROSS ]; then
+	MAKE_TARGET="headers_install"
+else
+	MAKE_TARGET="install modules_install firmware_install headers_install"
+fi
 make mrproper && \
 cp -a $SOURCE_DIR/$NAME-$VER.config .config && \
 make oldconfig && \
@@ -29,10 +43,14 @@ make ARCH=$OPKG_ARCH \
 	INSTALL_MOD_STRIP=1 \
 	INSTALL_MOD_PATH=$OPKG_WORK_BUILD/$INSTALL_DIR \
 	INSTALL_HDR_PATH=$OPKG_WORK_BUILD/$INSTALL_DIR/usr \
-	install modules_install firmware_install headers_install
+	$MAKE_TARGET
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
 	exit 1
+fi
+
+if [ $INITIAL_CROSS ]; then
+	exit 0
 fi
 
 #PACK
