@@ -4,6 +4,7 @@
 # - STRIP_SHLIB: strip command options for shared libraries
 # - STRIP_BIN: strip command options for non shared libraries
 # - ARCH: architecture value. "opkg-cl print-architecture" will show
+# - INITIAL_CROSS: set 1 for building cross environment
 
 source ~/.nnl-builder/settings
 
@@ -36,6 +37,13 @@ rm -rf $TARGET_DIR/usr/man
 rmdir $TARGET_DIR/usr/share 2>/dev/null
 rm -f $TARGET_DIR/usr/lib/charset.alias 
 rm -f $TARGET_DIR/usr/share/locale/locale.alias 
+
+if [ $INITIAL_CROSS -eq 1 ]; then
+	mkdir -p $OPKG_WORK_CROSS
+	cd $TARGET_DIR
+	tar cf - . | ( cd $OPKG_WORK_CROSS; tar xvf -)
+	exit $?
+fi
 
 echo "########################################"
 # Name:

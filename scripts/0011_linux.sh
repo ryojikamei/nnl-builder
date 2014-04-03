@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/ash -x
 
 #INIT
 source ~/.nnl-builder/settings
@@ -13,31 +13,36 @@ NAME=linux
 VER=3.2.55
 REL=5
 BUILD_DIR=$NAME-$VER
-if [ $INITIAL_CROSS ]; then
-	INSTALL_DIR=../../cross-tool
-else
-	INSTALL_DIR=$NAME-root
-fi
+INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
 #PREP
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
-$PATCH -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
+patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
 
 
 #BUILD
 if [ $INITIAL_CROSS ]; then
+	make mrproper
+	if [ $? -ne 0 ]; then
+		echo "ERROR:	building in $NAME-$VER" >&2
+		exit 1
+	fi
 	MAKE_TARGET="headers_install"
 else
+	make mrproper && \
+	cp -a $SOURCE_DIR/$NAME-$VER.config .config && \
+	make oldconfig && \
+	make $OPKG_MAKEFLAGS ARCH=$OPKG_ARCH all  && \
+	mkdir -p $OPKG_WORK_BUILD/$INSTALL_DIR/boot
+	if [ $? -ne 0 ]; then
+		echo "ERROR:	building in $NAME-$VER" >&2
+		exit 1
+	fi
 	MAKE_TARGET="install modules_install firmware_install headers_install"
 fi
-make mrproper && \
-cp -a $SOURCE_DIR/$NAME-$VER.config .config && \
-make oldconfig && \
-make $OPKG_MAKEFLAGS ARCH=$OPKG_ARCH all  && \
-mkdir -p $OPKG_WORK_BUILD/$INSTALL_DIR/boot && \
 make ARCH=$OPKG_ARCH \
 	INSTALL_PATH=$OPKG_WORK_BUILD/$INSTALL_DIR/boot \
 	INSTALL_MOD_STRIP=1 \
@@ -49,13 +54,10 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-if [ $INITIAL_CROSS ]; then
-	exit 0
-fi
-
 #PACK
 cd $OPKG_WORK_BUILD
-$OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
+INITIAL_CROSS=$INITIAL_CROSS $OPKG_HELPER/packaging.sh $NAME $VER-$REL \
+$SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2
 	exit 1
