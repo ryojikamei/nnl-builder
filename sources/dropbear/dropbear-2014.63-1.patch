@@ -1,0 +1,16 @@
+diff -duNr dropbear-2014.63-prev/Makefile.in dropbear-2014.63/Makefile.in
+--- dropbear-2014.63-prev/Makefile.in	2014-02-19 23:05:24.000000000 -0900
++++ dropbear-2014.63/Makefile.in	2014-04-04 12:14:58.000000000 -0900
+@@ -9,9 +9,9 @@
+ # dbclient functionality, and includes the progress-bar functionality in scp.
+ # Hopefully that seems intuitive.
+ 
+-ifndef PROGRAMS
+-	PROGRAMS=dropbear dbclient dropbearkey dropbearconvert
+-endif
++PROGRAMS=dropbear dbclient dropbearkey dropbearconvert scp
++MULTI=1
++SCPPROGRESS=1
+ 
+ STATIC_LTC=libtomcrypt/libtomcrypt.a
+ STATIC_LTM=libtommath/libtommath.a

@@ -4,19 +4,19 @@
 source ~/.nnl-builder/settings
 
 #PARAMS
-NAME=dropbear
-VER=2014.63
-REL=5
+NAME=opkg-utils
+VER=0f6a67bc150c0396dd7eeb477a0b9a1ce58a2118
+REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
-
 
 #PREP
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
+
 
 #BUILD
 CONFIG_ADD=""
@@ -29,7 +29,6 @@ fi
 
 #PACK
 cd $OPKG_WORK_BUILD
-mkdir -pv $INSTALL_DIR/etc/$NAME && \
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2

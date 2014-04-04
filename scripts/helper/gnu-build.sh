@@ -11,16 +11,18 @@ fi
 export CFLAGS="$OPKG_OPTFLAGS"
 export CXXFLAGS="$OPKG_OPTFLAGS"
 export FFLAGS="$OPKG_OPTFLAGS"
-if [ -d $OPKG_WORK_BUILD/$1-build ]; then
-	cd $OPKG_WORK_BUILD/$1-build
-	../$3/configure \
-	--build=$OPKG_BUILD --host=$OPKG_HOST --target=$OPKG_TARGET \
-	--prefix=/usr $5 && make $OPKG_MAKEFLAGS
-else
-	cd $OPKG_WORK_BUILD/$3
-	./configure \
-	--build=$OPKG_BUILD --host=$OPKG_HOST --target=$OPKG_TARGET \
-	--prefix=/usr $5 && make $OPKG_MAKEFLAGS
+if [ -f ../$3/configure ]; then
+	if [ -d $OPKG_WORK_BUILD/$1-build ]; then
+		cd $OPKG_WORK_BUILD/$1-build
+		../$3/configure \
+		--build=$OPKG_BUILD --host=$OPKG_HOST --target=$OPKG_TARGET \
+		--prefix=/usr $5 && make $OPKG_MAKEFLAGS
+	else
+		cd $OPKG_WORK_BUILD/$3
+		./configure \
+		--build=$OPKG_BUILD --host=$OPKG_HOST --target=$OPKG_TARGET \
+		--prefix=/usr $5 && make $OPKG_MAKEFLAGS
+	fi
 fi
 
 rm -rf $OPKG_WORK_BUILD/$4
