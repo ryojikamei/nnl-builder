@@ -1,0 +1,1 @@
+../scripts/index-insert.sh
