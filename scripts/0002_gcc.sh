@@ -3,9 +3,13 @@
 #INIT
 source ~/.nnl-builder/settings
 if [ "`echo $0 | grep cross`" == $0 ]; then
-	INITIAL_CROSS=1
+	if [ -f $OPKG_WORK_CROSS/lib/libc.a ]; then
+		CROSS=2
+	else
+		CROSS=1
+	fi
 else
-	INITIAL_CROSS=0
+	CROSS=0
 fi
 
 #PARAMS
@@ -34,19 +38,22 @@ patch -Np1 -i $SOURCE_DIR/$NAME-$VER-musl-3.patch
 rm -rf $OPKG_WORK_BUILD/$NAME-build
 mkdir -v $OPKG_WORK_BUILD/$NAME-build
 CONFIG_ADD=" --disable-libmudflap --enable-c99 --enable-long-long"
-if [ $INITIAL_CROSS ]; then
+if [ $CROSS -eq 1 ]; then
 	CONFIG_ADD="$CONFIG_ADD --with-sysroot=$OPKG_WORK_CROSS \
-	--disable-nls --disable-shared --without-headers --with-newlib\
-	--disable-decimal-float --disable-libgomp --disable-libmudflap \
-	--disable-libssp --disable-libatomic --disable-libquadmath \
-	--disable-threads --enable-languages=c --disable-multilib \
+	--disable-shared --without-headers --with-newlib \
+	--disable-decimal-float --disable-libgomp \
+	--disable-libssp --disable-libquadmath \
+	--disable-threads --enable-languages=c \
 	--with-arch=$OPKG_CTRL_ARCH --host=$OPKG_BUILD"
-#	CONFIG_ADD="$CONFIG_ADD --disable-threads --enable-languages=c \
-#	--with-sysroot=$OPKG_WORK_CROSS --without-headers --with-newlib \
-#	--disable-decimal-float \
-#	--with-arch=$OPKG_CTRL_ARCH --host=$OPKG_BUILD"
+else if [ $CROSS -eq 2 ]; then
+	CONFIG_ADD="$CONFIG_ADD --with-sysroot=$OPKG_WORK_CROSS \
+	--disable-shared --disable-libgomp \
+	--disable-libssp --disable-libquadmath \
+	--enable-languages=c \
+	--with-arch=$OPKG_CTRL_ARCH --host=$OPKG_BUILD"
 else
 	CONFIG_ADD="$CONFIG_ADD --enable-languages=c,c++"
+fi
 fi
 
 
@@ -59,9 +66,9 @@ fi
 #PACK
 cd $OPKG_WORK_BUILD
 rm -fv $INSTALL_DIR/usr/lib/libiberty.a && \
-rm -fv $INSTALL_DIR/usr/bin/*-linux-musl-* && \
+if [ $CROSS -eq 0 ]; then rm -fv $INSTALL_DIR/usr/bin/*-linux-musl-*; fi && \
 # --strip-unneeded has problem in perl or python
-STRIP_BIN="strip --strip-debug" INITIAL_CROSS=$INITIAL_CROSS \
+STRIP_BIN="strip --strip-debug" CROSS=$CROSS \
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2
