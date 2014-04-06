@@ -51,8 +51,7 @@ fi
 
 #PACK
 cd $OPKG_WORK_BUILD
-MODE=$OPKG_BUILD_MODE $OPKG_HELPER/packaging.sh $NAME $VER-$REL \
-$SOURCE_DIR $INSTALL_DIR
+$OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2
 	exit 1

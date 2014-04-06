@@ -4,7 +4,6 @@
 # - STRIP_SHLIB: strip command options for shared libraries
 # - STRIP_BIN: strip command options for non shared libraries
 # - ARCH: architecture value. "opkg-cl print-architecture" will show
-# - MODE: native, target, or cross
 
 source ~/.nnl-builder/settings
 
@@ -38,7 +37,8 @@ rmdir $TARGET_DIR/usr/share 2>/dev/null
 rm -f $TARGET_DIR/usr/lib/charset.alias 
 rm -f $TARGET_DIR/usr/share/locale/locale.alias 
 
-case "$MODE" in
+
+case "$OPKG_BUILD_MODE" in
 "cross" )
 	echo -n "Installing into cross-tools... "
 	mkdir -p $OPKG_WORK_CROSS

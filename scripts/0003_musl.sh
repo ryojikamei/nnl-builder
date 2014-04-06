@@ -34,7 +34,7 @@ cd $OPKG_WORK_BUILD
 mkdir -p $INSTALL_DIR/bin && \
 ln -s ../lib/ld-musl-i386.so.1 $INSTALL_DIR/bin/ldd && \
 mkdir -p $INSTALL_DIR/usr/lib && \
-MODE=$OPKG_BUILD_MODE $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
+$OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2
 	exit 1

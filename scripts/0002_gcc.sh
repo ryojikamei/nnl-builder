@@ -1,15 +1,15 @@
 #!/bin/sh -x
 
 #INIT
-if [ "`echo $0 | grep cross`" == $0 ]; then
-	if [ -f $OPKG_WORK_CROSS/lib/libc.a ]; then
-		CROSS=2
-	else
-		CROSS=1
-	fi
-else
-	CROSS=0
-fi
+##if [ "`echo $0 | grep cross`" == $0 ]; then
+##	if [ -f $OPKG_WORK_CROSS/lib/libc.a ]; then
+##		CROSS=2
+##	else
+##		CROSS=1
+##	fi
+##else
+##	CROSS=0
+##fi
 source ~/.nnl-builder/settings
 
 #PARAMS
@@ -47,13 +47,14 @@ case "$OPKG_BUILD_MODE" in
 	;;
 "target")
 	CONFIG_ADD="$CONFIG_ADD --enable-languages=c,c++ \
-	--enable-sjlj-exceptions --disable-libstdc++-v3"
+	--enable-sjlj-exceptions"
+	#--enable-sjlj-exceptions --disable-libstdc++-v3"
 	;;
 "cross")
 	CONFIG_ADD="$CONFIG_ADD --with-sysroot=$OPKG_WORK_CROSS \
 	--disable-shared --disable-libgomp \
 	--disable-libssp --disable-libquadmath \
-	--enable-languages=c \
+	--enable-languages=c,c++ --disable-libstdc++-v3 \
 	--with-arch=$OPKG_CTRL_ARCH"
 	if [ ! -f $OPKG_WORK_CROSS/lib/libc.a ]; then
 		CONFIG_ADD="$CONFIG_ADD --without-headers \
@@ -74,7 +75,7 @@ cd $OPKG_WORK_BUILD
 rm -fv $INSTALL_DIR/usr/lib/libiberty.a && \
 if [ $OPKG_BUILD_MODE == "native" ]; then rm -fv $INSTALL_DIR/usr/bin/*-linux-musl-*; fi && \
 # --strip-unneeded has problem in perl or python
-STRIP_BIN="strip --strip-debug" MODE=$OPKG_BUILD_MODE \
+STRIP_BIN="strip --strip-debug" \
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2
