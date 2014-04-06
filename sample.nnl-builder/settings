@@ -1,17 +1,67 @@
-
-OPKG_WORK_ROOT=/root/nnl-builder
+OPKG_WORK_ROOT=/home/kamei/nnl-builder
 OPKG_WORK_BUILD=$OPKG_WORK_ROOT/build
 OPKG_WORK_PKGS=$OPKG_WORK_ROOT/packages
-OPKG_WORK_SCRIPTS=$OPKG_WORK_ROOT/scripts
 OPKG_WORK_SOURCES=$OPKG_WORK_ROOT/sources
+OPKG_WORK_CROSS=$OPKG_WORK_ROOT/cross-tools
+OPKG_WORK_TARGET=$OPKG_WORK_ROOT/target-tree
 
-OPKG_BUILD=i486-linux-musl
-OPKG_HOST=i486-linux-musl
-OPKG_TARGET=i486-linux-musl
 OPKG_ARCH=x86
 OPKG_CTRL_ARCH=i486
 
-OPKG_OPTFLAGS="-Os -march=i486"
-OPKG_MAKEFLAGS="-j4"
 
+# prevent mode change from sourcing multiply
+if [ "x$OPKG_BUILD_MODE" == "x" ]; then
+	if [ "`echo $0 | grep cross`" == $0 ]; then
+		echo "Running to make cross tools"
+		OPKG_BUILD_MODE="cross"
+	else if [ "`echo $0 | grep target`" == $0 ]; then
+		echo "Running to make target tree"
+		OPKG_BUILD_MODE="target"
+	else
+		echo "Running for native environment"
+		OPKG_BUILD_MODE="native"
+	fi
+	fi
+fi
+
+case "$OPKG_BUILD_MODE" in
+"native" )
+	OPKG_WORK_SCRIPTS=$OPKG_WORK_ROOT/scripts
+	OPKG_BUILD=${OPKG_CTRL_ARCH}-linux-musl
+	OPKG_HOST=${OPKG_CTRL_ARCH}-linux-musl
+	OPKG_TARGET=${OPKG_CTRL_ARCH}-linux-musl
+	OPKG_OPTFLAGS="-Os -march=$OPKG_CTRL_ARCH"
+	;;
+"target" )
+	OPKG_WORK_SCRIPTS=$OPKG_WORK_ROOT/cross-scripts
+	OPKG_BUILD=`gcc -dumpmachine`
+	OPKG_HOST=${OPKG_CTRL_ARCH}-linux-musl
+	OPKG_TARGET=${OPKG_CTRL_ARCH}-linux-musl
+	PATH=$OPKG_WORK_CROSS/usr/bin:$OPKG_WORK_CROSS/bin:$PATH
+	OPKG_OPTFLAGS="-Os"
+	#OPKG_OPTFLAGS="-Os -march=$OPKG_CTRL_ARCH"
+	CC=$OPKG_HOST-gcc
+	CXX=$OPKG_HOST-g++
+	AR=$OPKG_HOST-ar
+	AS=$OPKG_HOST-as
+	LD=$OPKG_HOST-ld
+	RANLIB=$OPKG_HOST-ranlib
+	READELF=$OPKG_HOST-readelf
+	STRIP=$OPKG_HOST-strip
+	;;
+"cross" )
+	OPKG_WORK_SCRIPTS=$OPKG_WORK_ROOT/cross-scripts
+	OPKG_BUILD=`gcc -dumpmachine`
+	OPKG_HOST=`gcc -dumpmachine`
+	OPKG_TARGET=${OPKG_CTRL_ARCH}-linux-musl
+	PATH=$OPKG_WORK_CROSS/usr/bin:$OPKG_WORK_CROSS/bin:$PATH
+	OPKG_OPTFLAGS="-Os"
+	#OPKG_OPTFLAGS="-Os -march=$OPKG_CTRL_ARCH"
+	;;
+esac
+
+
+#OPKG_MAKEFLAGS="-j`cat /proc/cpuinfo | grep processor | wc -l`"
+OPKG_MAKEFLAGS="-j2"
 OPKG_HELPER="$OPKG_WORK_SCRIPTS/helper"
+

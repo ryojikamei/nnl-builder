@@ -6,6 +6,7 @@
 *-add
 *-prev
 /build/*
+/target-tree/*
 /cross-tools/*
 /packages/*
 /sources/*/*tar*

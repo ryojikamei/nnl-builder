@@ -1,0 +1,14 @@
+diff -duNr binutils-2.22/bfd/trad-core.c binutils-2.22-1/bfd/trad-core.c
+--- binutils-2.22/bfd/trad-core.c	2011-06-06 10:26:04.000000000 +0900
++++ binutils-2.22-1/bfd/trad-core.c	2014-04-05 22:36:58.098999547 +0900
+@@ -52,6 +52,10 @@
+ # define NBPG getpagesize()
+ #endif
+ 
++#ifndef PAGE_SIZE
++#define PAGE_SIZE 4096
++#endif
++
+ struct trad_core_struct
+ {
+   asection *data_section;

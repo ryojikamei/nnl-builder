@@ -1,7 +1,6 @@
 #!/bin/sh -x
 
 #INIT
-source ~/.nnl-builder/settings
 if [ "`echo $0 | grep cross`" == $0 ]; then
 	if [ -f $OPKG_WORK_CROSS/lib/libc.a ]; then
 		CROSS=2
@@ -11,6 +10,7 @@ if [ "`echo $0 | grep cross`" == $0 ]; then
 else
 	CROSS=0
 fi
+source ~/.nnl-builder/settings
 
 #PARAMS
 NAME=gcc
@@ -33,29 +33,35 @@ tar xf $SOURCE_DIR/mpc-$MPC_VER.* && mv mpc-* mpc
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-musl.patch
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-musl-2.patch
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-musl-3.patch
+if [ $OPKG_BUILD_MODE == "target" ]; then
+	patch -Np1 -i $SOURCE_DIR/$NAME-$VER-musl-4.patch
+fi
 
 #BUILD
 rm -rf $OPKG_WORK_BUILD/$NAME-build
 mkdir -v $OPKG_WORK_BUILD/$NAME-build
 CONFIG_ADD=" --disable-libmudflap --enable-c99 --enable-long-long"
-if [ $CROSS -eq 1 ]; then
-	CONFIG_ADD="$CONFIG_ADD --with-sysroot=$OPKG_WORK_CROSS \
-	--disable-shared --without-headers --with-newlib \
-	--disable-decimal-float --disable-libgomp \
-	--disable-libssp --disable-libquadmath \
-	--disable-threads --enable-languages=c \
-	--with-arch=$OPKG_CTRL_ARCH --host=$OPKG_BUILD"
-else if [ $CROSS -eq 2 ]; then
+case "$OPKG_BUILD_MODE" in
+"native" )
+	CONFIG_ADD="$CONFIG_ADD --enable-languages=c,c++"
+	;;
+"target")
+	CONFIG_ADD="$CONFIG_ADD --enable-languages=c,c++ \
+	--enable-sjlj-exceptions --disable-libstdc++-v3"
+	;;
+"cross")
 	CONFIG_ADD="$CONFIG_ADD --with-sysroot=$OPKG_WORK_CROSS \
 	--disable-shared --disable-libgomp \
 	--disable-libssp --disable-libquadmath \
 	--enable-languages=c \
-	--with-arch=$OPKG_CTRL_ARCH --host=$OPKG_BUILD"
-else
-	CONFIG_ADD="$CONFIG_ADD --enable-languages=c,c++"
-fi
-fi
-
+	--with-arch=$OPKG_CTRL_ARCH"
+	if [ ! -f $OPKG_WORK_CROSS/lib/libc.a ]; then
+		CONFIG_ADD="$CONFIG_ADD --without-headers \
+		--with-newlib --disable-decimal-float \
+		--disable-threads"
+	fi
+	;;
+esac
 
 $OPKG_HELPER/gnu-build.sh $NAME $VER $BUILD_DIR $INSTALL_DIR "$CONFIG_ADD"
 if [ $? -ne 0 ]; then
@@ -66,9 +72,9 @@ fi
 #PACK
 cd $OPKG_WORK_BUILD
 rm -fv $INSTALL_DIR/usr/lib/libiberty.a && \
-if [ $CROSS -eq 0 ]; then rm -fv $INSTALL_DIR/usr/bin/*-linux-musl-*; fi && \
+if [ $OPKG_BUILD_MODE == "native" ]; then rm -fv $INSTALL_DIR/usr/bin/*-linux-musl-*; fi && \
 # --strip-unneeded has problem in perl or python
-STRIP_BIN="strip --strip-debug" CROSS=$CROSS \
+STRIP_BIN="strip --strip-debug" MODE=$OPKG_BUILD_MODE \
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2

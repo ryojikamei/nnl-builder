@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/bin/ash -x
 
 source ~/.nnl-builder/settings
 
@@ -17,12 +17,17 @@ if [ -f ../$3/configure ]; then
 		../$3/configure \
 		--build=$OPKG_BUILD --host=$OPKG_HOST --target=$OPKG_TARGET \
 		--prefix=/usr $5 && make $OPKG_MAKEFLAGS
+		ret=$?
 	else
 		cd $OPKG_WORK_BUILD/$3
 		./configure \
 		--build=$OPKG_BUILD --host=$OPKG_HOST --target=$OPKG_TARGET \
 		--prefix=/usr $5 && make $OPKG_MAKEFLAGS
+		ret=$?
 	fi
+fi
+if [ $ret -ne 0 ]; then
+	return $ret
 fi
 
 rm -rf $OPKG_WORK_BUILD/$4

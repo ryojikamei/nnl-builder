@@ -1,0 +1,24 @@
+--- gcc-4.6.4/gcc/config/host-linux.c-orig	2012-03-23 11:19:46.000000000 +0900
++++ gcc-4.6.4/gcc/config/host-linux.c	2014-04-05 23:39:55.188250031 +0900
+@@ -90,6 +90,10 @@
+ # define TRY_EMPTY_VM_SPACE	0
+ #endif
+ 
++#ifndef SSIZE_MAX
++#define SSIZE_MAX 0x7fffffffL
++#endif
++
+ /* Determine a location where we might be able to reliably allocate SIZE
+    bytes.  FD is the PCH file, though we should return with the file 
+    unmapped.  */
+--- gcc-4.6.4/libstdc++-v3/configure-1	2014-04-06 19:50:47.944194847 +0900
++++ gcc-4.6.4/libstdc++-v3/configure	2014-04-06 20:09:55.801591753 +0900
+@@ -15072,7 +15072,7 @@
+ 
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for thread model used by GCC" >&5
+ $as_echo_n "checking for thread model used by GCC... " >&6; }
+-  target_thread_file=`$CXX -v 2>&1 | sed -n 's/^Thread model: //p'`
++  target_thread_file=`$CC -v 2>&1 | sed -n 's/^Thread model: //p'`
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $target_thread_file" >&5
+ $as_echo "$target_thread_file" >&6; }
+ 

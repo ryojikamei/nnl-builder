@@ -2,11 +2,6 @@
 
 #INIT
 source ~/.nnl-builder/settings
-if [ "`echo $0 | grep cross`" == $0 ]; then
-	CROSS=1
-else
-	CROSS=0
-fi
 
 
 #PARAMS
@@ -22,13 +17,16 @@ cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
+if [ $OPKG_BUILD_MODE == "target" ]; then
+	patch -Np1 -i $SOURCE_DIR/$NAME-$VER-2.patch
+fi
 
 
 #BUILD
 rm -rfv $OPKG_WORK_BUILD/$NAME-build
 mkdir -v $OPKG_WORK_BUILD/$NAME-build
-if [ $CROSS ]; then
-	CONFIG_ADD="--host=$OPKG_BUILD --with-sysroot=$OPKG_WORK_CROSS"
+if [ $OPKG_BUILD_MODE == "cross" ]; then
+	CONFIG_ADD=" --with-sysroot=$OPKG_WORK_CROSS"
 else
 	CONFIG_ADD=""
 fi
@@ -43,7 +41,13 @@ fi
 #PACK
 cd $OPKG_WORK_BUILD
 rm -rf $INSTALL_DIR/usr/*-linux-musl
-CROSS=$CROSS $OPKG_HELPER/packaging.sh $NAME $VER-$REL \
+#if [ $OPKG_BUILD_MODE != "native" ]; then
+#	for a in $INSTALL_DIR/usr/bin/${OPKG_TARGET}-*; do
+#		b=`echo $a | sed -e "s|$INSTALL_DIR/usr/bin/${OPKG_TARGET}-||"`
+#		ln -s ${OPKG_TARGET}-$b $INSTALL_DIR/usr/bin/$b
+#	done
+#fi
+MODE=$OPKG_BUILD_MODE $OPKG_HELPER/packaging.sh $NAME $VER-$REL \
 $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2

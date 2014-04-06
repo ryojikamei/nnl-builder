@@ -2,11 +2,6 @@
 
 #INIT
 source ~/.nnl-builder/settings
-if [ "`echo $0 | grep cross`" == $0 ]; then
-	CROSS=1
-else
-	CROSS=0
-fi
 
 #PARAMS
 NAME=linux
@@ -24,7 +19,7 @@ patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
 
 
 #BUILD
-if [ $CROSS ]; then
+if [ $OPKG_BUILD_MODE == "cross" ]; then
 	make mrproper
 	if [ $? -ne 0 ]; then
 		echo "ERROR:	building in $NAME-$VER" >&2
@@ -34,7 +29,7 @@ if [ $CROSS ]; then
 else
 	make mrproper && \
 	cp -a $SOURCE_DIR/$NAME-$VER.config .config && \
-	make oldconfig && \
+	make ARCH=$OPKG_ARCH oldconfig && \
 	make $OPKG_MAKEFLAGS ARCH=$OPKG_ARCH all  && \
 	mkdir -p $OPKG_WORK_BUILD/$INSTALL_DIR/boot
 	if [ $? -ne 0 ]; then
@@ -56,7 +51,7 @@ fi
 
 #PACK
 cd $OPKG_WORK_BUILD
-CROSS=$CROSS $OPKG_HELPER/packaging.sh $NAME $VER-$REL \
+MODE=$OPKG_BUILD_MODE $OPKG_HELPER/packaging.sh $NAME $VER-$REL \
 $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2
