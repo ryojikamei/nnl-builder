@@ -1,1 +1,0 @@
-../scripts/0007_bash.sh

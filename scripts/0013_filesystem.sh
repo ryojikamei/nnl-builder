@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=filesystem
 VER=1.0
-REL=3
+REL=4
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -29,16 +29,23 @@ mkdir -p usr/local && cd usr && mkdir bin include lib sbin share src \
 
 #PACK
 cd $OPKG_WORK_BUILD
-cp -av $SOURCE_DIR/CONTROL $OPKG_WORK_BUILD/$INSTALL_DIR/
-DEPENDS=`grep ^Depends: $SOURCE_DIR/CONTROL/control`
-cat > $SOURCE_DIR/CONTROL/control <<EOF
+if [ "$OPKG_BUILD_MODE" == "native" ]; then
+	cp -av $SOURCE_DIR/CONTROL $INSTALL_DIR/
+	DEPENDS=`grep ^Depends: $SOURCE_DIR/CONTROL/control`
+	cat > $SOURCE_DIR/CONTROL/control <<EOF
 Package:	$NAME
 Version:	$VER-$REL
 Architecture:	noarch
 $DEPENDS
 EOF
-opkg-build -C -O $OPKG_WORK_BUILD/$INSTALL_DIR $OPKG_WORK_PKGS
-if [ $? -ne 0 ]; then
+	opkg-build -C -O $OPKG_WORK_BUILD/$INSTALL_DIR $OPKG_WORK_PKGS
+	ret=$?
+else
+	cd $INSTALL_DIR
+	tar cf - . | ( cd $OPKG_WORK_TARGET; tar xf -)
+	ret=$?
+fi
+if [ $ret -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2
 	exit 1
 fi
