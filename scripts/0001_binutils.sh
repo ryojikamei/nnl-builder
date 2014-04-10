@@ -26,7 +26,7 @@ fi
 rm -rfv $OPKG_WORK_BUILD/$NAME-build
 mkdir -v $OPKG_WORK_BUILD/$NAME-build
 if [ $OPKG_BUILD_MODE == "cross" ]; then
-	CONFIG_ADD=" --with-sysroot=$OPKG_WORK_CROSS"
+	CONFIG_ADD=" --prefix=$OPKG_WORK_CROSS/usr --with-sysroot=$OPKG_WORK_CROSS/usr/i486-linux-musl"
 else
 	CONFIG_ADD=""
 fi
@@ -47,6 +47,7 @@ rm -rf $INSTALL_DIR/usr/*-linux-musl
 #		ln -s ${OPKG_TARGET}-$b $INSTALL_DIR/usr/bin/$b
 #	done
 #fi
+exit
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2

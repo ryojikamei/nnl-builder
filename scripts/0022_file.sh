@@ -20,7 +20,9 @@ sed -i -e 's/linux-newlib/linux-musl/g;' config.sub
 
 #BUILD
 CONFIG_ADD=""
-
+if [ "$OPKG_BUILD_MODE" == "target" ]; then
+	cp -av $OPKG_WORK_CROSS/usr/share/misc/magic.mgc magic/
+fi
 $OPKG_HELPER/gnu-build.sh $NAME $VER $BUILD_DIR $INSTALL_DIR "$CONFIG_ADD"
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2

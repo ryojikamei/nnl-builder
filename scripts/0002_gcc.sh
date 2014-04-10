@@ -1,15 +1,6 @@
 #!/bin/sh -x
 
 #INIT
-##if [ "`echo $0 | grep cross`" == $0 ]; then
-##	if [ -f $OPKG_WORK_CROSS/lib/libc.a ]; then
-##		CROSS=2
-##	else
-##		CROSS=1
-##	fi
-##else
-##	CROSS=0
-##fi
 source ~/.nnl-builder/settings
 
 #PARAMS
