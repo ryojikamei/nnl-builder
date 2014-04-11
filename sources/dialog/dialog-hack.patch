@@ -1,0 +1,39 @@
+--- dialog-1.2-20140219/dialog.c-orig	2014-02-20 04:49:04.000000000 -0900
++++ dialog-1.2-20140219/dialog.c	2014-04-10 11:03:28.000000000 -0900
+@@ -479,6 +479,28 @@
+     dialog_argv = (*argvp);
+ }
+ 
++int underscore_hack_argv(int *argcp, char ***argvp) {
++    int j, k, len;
++    char *cur;
++
++    for (j = 1; j < *argcp; j++) {
++	if (strstr((*argvp)[j], "_") != NULL) {
++	    len = strlen((*argvp)[j]);
++	    char ns[len];
++	    memset(ns, 0, len);
++	    for (k = 0; k != len; k++) {
++		cur = strndup((*argvp)[j] + k, 1);
++		if(!strcmp(cur, "_"))
++		    strcat(ns, " ");
++		else
++		    strcat(ns, cur);
++	    }
++	    (*argvp)[j] = strdup(ns);
++	}
++    }
++}
++
++
+ #define OptionChars "\
+ 0123456789\
+ -\
+@@ -1726,6 +1748,7 @@
+     (void) setlocale(LC_ALL, "");
+ #endif
+ 
++    underscore_hack_argv(&argc, &argv);
+     unescape_argv(&argc, &argv);
+     program = argv[0];
+     dialog_state.output = stderr;
