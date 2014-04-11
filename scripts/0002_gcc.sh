@@ -39,18 +39,17 @@ case "$OPKG_BUILD_MODE" in
 "target")
 	CONFIG_ADD="$CONFIG_ADD --enable-languages=c,c++ \
 	--enable-sjlj-exceptions"
-	#--enable-sjlj-exceptions --disable-libstdc++-v3"
 	;;
 "cross")
 	CONFIG_ADD="$CONFIG_ADD --with-sysroot=$OPKG_WORK_CROSS \
-	--disable-shared --disable-libgomp \
-	--disable-libssp --disable-libquadmath \
-	--enable-languages=c,c++ --disable-libstdc++-v3 \
+	--enable-languages=c,c++ --enable-sjlj-exceptions \
 	--with-arch=$OPKG_CTRL_ARCH"
 	if [ ! -f $OPKG_WORK_CROSS/lib/libc.a ]; then
 		CONFIG_ADD="$CONFIG_ADD --without-headers \
 		--with-newlib --disable-decimal-float \
-		--disable-threads"
+		--disable-threads --disable-shared \
+		--disable-libssp --disable-libquadmath \
+		--disable-libgomp --disable-libstdc++-v3"
 	fi
 	;;
 esac

@@ -16,10 +16,13 @@ cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
+if [ $OPKG_BUILD_MODE != "native" ]; then
+	patch -Np1 -i $SOURCE_DIR/$NAME-$VER-2.patch
+fi
 sed -i -e 's/linux-newlib/linux-musl/g;' build-aux/config.sub
 
 #BUILD
-CONFIG_ADD=""
+CONFIG_ADD=" "
 
 $OPKG_HELPER/gnu-build.sh $NAME $VER $BUILD_DIR $INSTALL_DIR "$CONFIG_ADD"
 if [ $? -ne 0 ]; then

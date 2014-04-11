@@ -18,7 +18,12 @@ tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
 
 
 #BUILD
-CC="gcc" CFLAGS="$OPKG_OPTFLAGS" ./configure --prefix=/ --eprefix=/bin \
+if [ $OPKG_BUILD_MODE == "target" ]; then
+	export CC="$OPKG_TARGET-gcc"
+else
+	export CC="gcc"
+fi
+CFLAGS="$OPKG_OPTFLAGS" ./configure --prefix=/ --eprefix=/bin \
 	--libdir=/usr/lib --sharedlibdir=/lib --includedir=/usr/include && \
 make $OPKG_MAKEFLAGS && make DESTDIR=$OPKG_WORK_BUILD/$INSTALL_DIR install
 if [ $? -ne 0 ]; then
