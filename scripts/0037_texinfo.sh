@@ -22,7 +22,7 @@ fi
 sed -i -e 's/linux-newlib/linux-musl/g;' build-aux/config.sub
 
 #BUILD
-CONFIG_ADD=" "
+CONFIG_ADD=""
 
 $OPKG_HELPER/gnu-build.sh $NAME $VER $BUILD_DIR $INSTALL_DIR "$CONFIG_ADD"
 if [ $? -ne 0 ]; then

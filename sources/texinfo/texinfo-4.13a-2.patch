@@ -1,14 +1,3 @@
-#--- texinfo-4.13/Makefile.in-prev	2008-09-19 03:46:25.000000000 +0900
-#+++ texinfo-4.13/Makefile.in	2014-04-11 22:54:05.295569231 +0900
-#@@ -138,7 +138,7 @@
-#   distclean-recursive maintainer-clean-recursive
-# ETAGS = etags
-# CTAGS = ctags
-#-DIST_SUBDIRS = @native_tools@ gnulib/lib lib install-info info \
-#+DIST_SUBDIRS = tools/gnulib/lib @native_tools@ lib install-info info \
-# 	makeinfo po util doc
-# DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-# distdir = $(PACKAGE)-$(VERSION)
 --- texinfo-4.13/Makefile.in	2014-04-11 23:15:24.143459658 +0900
 +++ texinfo-4.13-1/Makefile.in	2014-04-11 23:15:09.532267777 +0900
 @@ -450,7 +450,7 @@
