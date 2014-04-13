@@ -1,4 +1,4 @@
-OPKG_WORK_ROOT=/home/kamei/nnl-builder
+OPKG_WORK_ROOT=$HOME/nnl-builder
 OPKG_WORK_BUILD=$OPKG_WORK_ROOT/build
 OPKG_WORK_PKGS=$OPKG_WORK_ROOT/packages
 OPKG_WORK_SOURCES=$OPKG_WORK_ROOT/sources
@@ -13,13 +13,13 @@ OPKG_CTRL_ARCH=i486
 if [ "x$OPKG_BUILD_MODE" == "x" ]; then
 	if [ "`echo $0 | grep cross`" == $0 ]; then
 		echo "Running to make cross tools"
-		OPKG_BUILD_MODE="cross"
+		export OPKG_BUILD_MODE="cross"
 	else if [ "`echo $0 | grep target`" == $0 ]; then
 		echo "Running to make target tree"
-		OPKG_BUILD_MODE="target"
+		export OPKG_BUILD_MODE="target"
 	else
 		echo "Running for native environment"
-		OPKG_BUILD_MODE="native"
+		export OPKG_BUILD_MODE="native"
 	fi
 	fi
 fi
@@ -38,8 +38,8 @@ case "$OPKG_BUILD_MODE" in
 	OPKG_HOST=${OPKG_CTRL_ARCH}-linux-musl
 	OPKG_TARGET=${OPKG_CTRL_ARCH}-linux-musl
 	PATH=$OPKG_WORK_CROSS/usr/bin:$OPKG_WORK_CROSS/bin:$PATH
-	OPKG_OPTFLAGS="-Os"
-	#OPKG_OPTFLAGS="-Os -march=$OPKG_CTRL_ARCH"
+	#OPKG_OPTFLAGS="-Os"
+	OPKG_OPTFLAGS="-Os -march=$OPKG_CTRL_ARCH"
 	CC=$OPKG_HOST-gcc
 	CXX=$OPKG_HOST-g++
 	AR=$OPKG_HOST-ar
@@ -61,7 +61,7 @@ case "$OPKG_BUILD_MODE" in
 esac
 
 
-#OPKG_MAKEFLAGS="-j`cat /proc/cpuinfo | grep processor | wc -l`"
-OPKG_MAKEFLAGS="-j2"
+NR_CPUS=`cat /proc/cpuinfo | grep processor | wc -l`
+OPKG_MAKEFLAGS="-j`expr $NR_CPUS + 1`"
 OPKG_HELPER="$OPKG_WORK_SCRIPTS/helper"
 
