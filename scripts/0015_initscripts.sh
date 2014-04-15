@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=initscripts
 VER=1.0
-REL=3
+REL=4
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -23,7 +23,7 @@ rm -rf $INSTALL_DIR
 mkdir $INSTALL_DIR
 mv $BUILD_DIR/* $INSTALL_DIR && \
 make -C $OPKG_WORK_BUILD/bootscripts-embedded \
-	DESTDIR=$INSTALL_DIR install-bootscripts
+	DESTDIR=$OPKG_WORK_BUILD/$INSTALL_DIR install-bootscripts
 if [ $? -ne 0 ]; then
 	echo "ERROR:	packaging in $NAME-$VER" >&2
 	exit 1

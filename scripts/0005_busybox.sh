@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=busybox
 VER=1.22.1
-REL=3
+REL=4
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -23,6 +23,9 @@ patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
 
 
 #BUILD
+if [ $OPKG_BUILD_MODE != "native" ]; then
+	export CROSS_COMPILE=${OPKG_TARGET}-
+fi
 make defconfig
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
