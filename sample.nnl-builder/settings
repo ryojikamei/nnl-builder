@@ -40,14 +40,14 @@ case "$OPKG_BUILD_MODE" in
 	PATH=$OPKG_WORK_CROSS/usr/bin:$OPKG_WORK_CROSS/bin:$PATH
 	#OPKG_OPTFLAGS="-Os"
 	OPKG_OPTFLAGS="-Os -march=$OPKG_CTRL_ARCH"
-	CC=$OPKG_HOST-gcc
-	CXX=$OPKG_HOST-g++
-	AR=$OPKG_HOST-ar
-	AS=$OPKG_HOST-as
-	LD=$OPKG_HOST-ld
-	RANLIB=$OPKG_HOST-ranlib
-	READELF=$OPKG_HOST-readelf
-	STRIP=$OPKG_HOST-strip
+	export CC=$OPKG_HOST-gcc
+	export CXX=$OPKG_HOST-g++
+	export AR=$OPKG_HOST-ar
+	export AS=$OPKG_HOST-as
+	export LD=$OPKG_HOST-ld
+	export RANLIB=$OPKG_HOST-ranlib
+	export READELF=$OPKG_HOST-readelf
+	export STRIP=$OPKG_HOST-strip
 	;;
 "cross" )
 	OPKG_WORK_SCRIPTS=$OPKG_WORK_ROOT/cross-scripts
