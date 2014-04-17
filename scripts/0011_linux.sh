@@ -5,8 +5,8 @@ source ~/.nnl-builder/settings
 
 #PARAMS
 NAME=linux
-VER=3.2.55
-REL=5
+VER=3.2.57
+REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -27,9 +27,11 @@ if [ $OPKG_BUILD_MODE == "cross" ]; then
 	fi
 	MAKE_TARGET="headers_install"
 else
+	#make mrproper && \
+	#cp -a $SOURCE_DIR/$NAME-$VER.config .config && \
+	#make ARCH=$OPKG_ARCH oldconfig && \
 	make mrproper && \
-	cp -a $SOURCE_DIR/$NAME-$VER.config .config && \
-	make ARCH=$OPKG_ARCH oldconfig && \
+	make ARCH=$OPKG_ARCH allyesconfig && \
 	make $OPKG_MAKEFLAGS ARCH=$OPKG_ARCH all  && \
 	mkdir -p $OPKG_WORK_BUILD/$INSTALL_DIR/boot
 	if [ $? -ne 0 ]; then
