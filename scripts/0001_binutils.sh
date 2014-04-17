@@ -23,10 +23,15 @@ fi
 
 
 #BUILD
+if [ `which makeinfo` -ne 0 ]; then
+	echo "Install texinfo package beforehand!"
+	exit 1
+fi
+
 rm -rfv $OPKG_WORK_BUILD/$NAME-build
 mkdir -v $OPKG_WORK_BUILD/$NAME-build
 if [ $OPKG_BUILD_MODE == "cross" ]; then
-	CONFIG_ADD=" --with-sysroot=$OPKG_WORK_CROSS --with-lib-path=$OPKG_WORK_CROSS/usr/lib:$OPKG_WORK_CROSS/lib:$OPKG_WORK_TARGET/usr/lib:$OPKG_WORK_TARGET/lib"
+	CONFIG_ADD=" --with-sysroot=$OPKG_WORK_CROSS --with-lib-path=$OPKG_WORK_CROSS/usr/lib:$OPKG_WORK_CROSS/lib:$OPKG_WORK_TARGET/usr/lib:$OPKG_WORK_TARGET/lib --disable-werror"
 else
 	CONFIG_ADD=""
 fi
