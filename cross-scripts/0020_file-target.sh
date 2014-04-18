@@ -1,1 +1,0 @@
-../scripts/0022_file.sh

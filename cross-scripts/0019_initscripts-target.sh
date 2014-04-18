@@ -1,1 +1,0 @@
-../scripts/0015_initscripts.sh

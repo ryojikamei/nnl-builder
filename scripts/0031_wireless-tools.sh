@@ -16,6 +16,9 @@ cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME.$VER.*tar* && cd $BUILD_DIR
 sed -i -e "s/-Os/$OPKG_OPTFLAGS/g;" Makefile
+sed -i -e "s/CC = gcc//g;" Makefile
+sed -i -e "s/AR = ar//g;" Makefile
+sed -i -e "s/RANLIB = ranlib//g;" Makefile
 
 
 #BUILD
