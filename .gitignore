@@ -12,5 +12,4 @@
 /sources/*/*tar*
 /sources/*/*zip*
 /sources/strace
-/sources/bash/bash-4.2-patches/*
 /tmp

@@ -100,11 +100,6 @@ if [ "x$TARGET_LIBS" != "x" ]; then
 		DEPPKG=`opkg-cl search $l | cut -f1 -d' '`
 		if [ x$DEPPKG == "x" ]; then
 			echo "WARNING: dependency file $l is not owned by any packages!"
-			echo "Type Yes to ignore it."
-			read y
-			if [ $y != "Yes" ]; then
-				exit 1
-			fi
 		# eliminate itself
 		else if [ $DEPPKG != $P_NAME ]; then
 			echo $DEPPKG >> $TARGET_DIR/auto-depends
