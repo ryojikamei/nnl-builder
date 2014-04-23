@@ -34,7 +34,8 @@ mkdir -v $OPKG_WORK_BUILD/$NAME-build
 CONFIG_ADD=" --disable-libmudflap --enable-c99 --enable-long-long"
 case "$OPKG_BUILD_MODE" in
 "native" )
-	CONFIG_ADD="$CONFIG_ADD --enable-languages=c,c++"
+	CONFIG_ADD="$CONFIG_ADD --enable-languages=c,c++ \
+	--enable-sjlj-exceptions"
 	;;
 "target")
 	CONFIG_ADD="$CONFIG_ADD --enable-languages=c,c++ \
