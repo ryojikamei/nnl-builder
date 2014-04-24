@@ -1,1 +1,1 @@
-../scripts/0015_initscripts.sh
+../scripts/0012_initscripts.sh

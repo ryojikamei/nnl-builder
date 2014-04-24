@@ -1,1 +1,0 @@
-../scripts/0037_texinfo.sh

@@ -1,1 +1,1 @@
-../scripts/0006_byacc.sh
+../scripts/0006_byacc.sh-keep

@@ -1,1 +1,1 @@
-../scripts/0014_setup.sh
+../scripts/0011_setup.sh

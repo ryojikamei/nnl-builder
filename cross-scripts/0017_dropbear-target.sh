@@ -1,1 +1,1 @@
-../scripts/0012_dropbear.sh
+../scripts/0009_dropbear.sh

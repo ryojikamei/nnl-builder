@@ -1,1 +1,1 @@
-../scripts/0023_gawk.sh
+../scripts/0020_gawk.sh

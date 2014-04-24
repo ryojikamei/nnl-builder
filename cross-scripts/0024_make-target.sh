@@ -1,1 +1,1 @@
-../scripts/0025_make.sh
+../scripts/0022_make.sh

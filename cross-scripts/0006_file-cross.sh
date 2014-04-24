@@ -1,1 +1,1 @@
-../scripts/0022_file.sh
+../scripts/0019_file.sh
