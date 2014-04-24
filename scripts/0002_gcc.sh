@@ -65,6 +65,7 @@ fi
 cd $OPKG_WORK_BUILD
 rm -fv $INSTALL_DIR/usr/lib/libiberty.a && \
 if [ $OPKG_BUILD_MODE == "native" ]; then rm -fv $INSTALL_DIR/usr/bin/*-linux-musl-*; fi && \
+if [ $OPKG_BUILD_MODE == "native" ]; then ln -s gcc $INSTALL_DIR/usr/bin/cc; fi && \
 # --strip-unneeded has problem in perl or python
 STRIP_BIN="strip --strip-debug" \
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR
