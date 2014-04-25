@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=busybox
 VER=1.22.1
-REL=4
+REL=5
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -20,6 +20,7 @@ patch -Np1 -i $SOURCE_DIR/$NAME-$VER-date.patch
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-iplink.patch
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-nc.patch
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
+sed -i -e 's/NAME_MAX/255/g;' coreutils/split.c
 
 
 #BUILD

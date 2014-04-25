@@ -2,7 +2,23 @@
 
 source ~/.nnl-builder/settings
 
-for s in `ls -1 $OPKG_WORK_SCRIPTS/0*.sh`;do
+case "$OPKG_BUILD_MODE" in
+"native" )
+	TYPE=""
+	;;
+"target" )
+	TYPE="-target"
+	;;
+"cross" )
+	TYPE="-cross"
+	;;
+*)
+	echo "Error: Invalid settings!"
+	exit 1
+esac
+
+
+for s in `ls -1 $OPKG_WORK_SCRIPTS/0*${TYPE}.sh`;do
 	l=`basename $s .sh`
 	echo -n "${l}: "
 	$s > /tmp/$l.log 2>&1
