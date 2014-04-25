@@ -98,10 +98,11 @@ if [ "x$TARGET_LIBS" != "x" ]; then
 	# - "ldd"
 	for l in `sort -b -u $TARGET_DIR/auto-depends.libs | grep ^/`; do
 		DEPPKG=`opkg-cl search $l | cut -f1 -d' '`
-		FOUND=""
+		#FOUND=""
 		if [ "x$DEPPKG" == "x" ]; then
 			# eliminate self-contained libs
-			FOUND=`find $TARGET_DIR -name $l`
+			n=`basename $l`
+			FOUND=`find $TARGET_DIR -name $n`
 			if [ "x$FOUND" == "x" ]; then
 				echo "WARNING: dependency file $l is not owned by any packages!"
 			fi
