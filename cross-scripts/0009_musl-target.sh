@@ -1,1 +1,1 @@
-../scripts/0001_musl.sh
+../scripts/0003_musl.sh

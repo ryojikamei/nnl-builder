@@ -1,1 +1,1 @@
-../scripts/0007_zlib.sh
+../scripts/0006_zlib.sh

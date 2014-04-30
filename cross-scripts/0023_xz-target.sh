@@ -1,1 +1,1 @@
-../scripts/0028_xz.sh
+../scripts/0030_xz.sh

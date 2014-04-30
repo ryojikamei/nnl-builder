@@ -1,1 +1,1 @@
-../scripts/0036_texinfo.sh
+../scripts/0038_texinfo.sh

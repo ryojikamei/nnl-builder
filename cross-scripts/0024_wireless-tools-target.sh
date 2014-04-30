@@ -1,1 +1,1 @@
-../scripts/0030_wireless-tools.sh
+../scripts/0032_wireless-tools.sh

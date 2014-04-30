@@ -1,1 +1,1 @@
-../scripts/0026_linux.sh
+../scripts/0027_linux.sh

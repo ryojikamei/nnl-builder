@@ -1,1 +1,1 @@
-../scripts/0023_ncurses.sh
+../scripts/0007_ncurses.sh
