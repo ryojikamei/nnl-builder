@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=glib
 VER=2.32.4
-REL=2
+REL=3
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -22,6 +22,7 @@ sed -i -e 's/linux-newlib/linux-musl/g;' config.sub
 #BUILD
 CONFIG_ADD=" "
 
+LIBFFI_CFLAGS="-I`find /usr/lib -name "libffi-*" -type d`/include " LIBFFI_LIBS="-lffi" \
 $OPKG_HELPER/gnu-build.sh $NAME $VER $BUILD_DIR $INSTALL_DIR "$CONFIG_ADD"
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
