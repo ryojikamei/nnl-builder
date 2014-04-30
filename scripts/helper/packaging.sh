@@ -14,20 +14,6 @@ fi
 
 TARGET_DIR=$OPKG_WORK_BUILD/$4
 
-# STRIP
-if [ "x$STRIP_SHLIB" == "x" ]; then
-	STRIP_SHLIB="strip --strip-debug"
-fi
-if [ "x$STRIP_BIN" == "x" ]; then
-	STRIP_BIN="strip --strip-unneeded"
-fi
-find $TARGET_DIR -type f | xargs file | grep " not stripped" | \
-	grep " shared object" | cut -f1 -d: | xargs $STRIP_SHLIB \
-	>/dev/null 2>&1
-find $TARGET_DIR -type f | xargs file | grep " not stripped" | \
-	grep -v " shared object" | cut -f1 -d: | xargs $STRIP_BIN \
-	>/dev/null 2>&1
-
 # REMOVE DOCS, use documents in internet.
 rm -rf $TARGET_DIR/usr/share/info
 rm -rf $TARGET_DIR/usr/info
@@ -148,6 +134,20 @@ Version:	$P_VER
 Architecture:	$P_ARCH
 Depends:	$P_DEPS
 EOF
+
+# STRIP
+if [ "x$STRIP_SHLIB" == "x" ]; then
+	STRIP_SHLIB="strip --strip-debug"
+fi
+if [ "x$STRIP_BIN" == "x" ]; then
+	STRIP_BIN="strip --strip-unneeded"
+fi
+find $TARGET_DIR -type f | xargs file | grep " not stripped" | \
+	grep " shared object" | cut -f1 -d: | xargs $STRIP_SHLIB \
+	>/dev/null 2>&1
+find $TARGET_DIR -type f | xargs file | grep " not stripped" | \
+	grep -v " shared object" | cut -f1 -d: | xargs $STRIP_BIN \
+	>/dev/null 2>&1
 
 opkg-build -C -O $TARGET_DIR $5 $OPKG_WORK_PKGS
 
