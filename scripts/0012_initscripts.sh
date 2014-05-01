@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=initscripts
 VER=1.0
-REL=5
+REL=6
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -16,7 +16,7 @@ cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME-$VER.*tar*
 tar xf $SOURCE_DIR/bootscripts-embedded-HEAD.tar.gz
-
+patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
 
 #BUILD
 rm -rf $INSTALL_DIR
