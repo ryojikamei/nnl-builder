@@ -28,11 +28,18 @@ for s in `ls -1 $OPKG_WORK_SCRIPTS/0*${TYPE}.sh`;do
 		mv /tmp/$l.log /tmp/OK-$l.log
 
 		mv $s ~/DONE
-		opkg-cl install $OPKG_WORK_PKGS/*.opk
-		mv $OPKG_WORK_PKGS/*.opk ~/DONE/
+		if [ $OPKG_BUILD_MODE == "native" ]; then
+			opkg-cl install $OPKG_WORK_PKGS/*.opk
+			mv $OPKG_WORK_PKGS/*.opk ~/DONE/
+		fi
 	else
 		echo "NG"
 		mv /tmp/$l.log /tmp/NG-$l.log
 	fi
 done
 
+if [ $OPKG_BUILD_MODE == "native" ]; then
+	echo "Check output in ~/DONE and /tmp. After that move them in ~/DONE to $OPKG_WORK_SCRIPTS or $OPKG_WORK_PKGS."
+else
+	echo "Check output in ~/DONE and /tmp. After that move them in ~/DONE to $OPKG_WORK_SCRIPTS."
+fi
