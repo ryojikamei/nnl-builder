@@ -5,7 +5,7 @@ source ~/.nnl-builder/settings
 
 #PARAMS
 NAME=openssl
-VER=1.0.1f
+VER=1.0.1g
 REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
