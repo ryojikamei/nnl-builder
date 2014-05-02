@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=openssl
 VER=1.0.1g
-REL=1
+REL=2
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -23,6 +23,7 @@ CONFIG_ADD=""
 
 ./config --prefix=/usr --openssldir=/usr/lib/openssl zlib shared no-sse2 \
 && make && \
+sed -i -e 's|./demoCA|/usr/lib/openssl|g;" apps/openssl.cnf && \
 make INSTALL_PREFIX=$OPKG_WORK_BUILD/$INSTALL_DIR install
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
