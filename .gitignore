@@ -11,5 +11,4 @@
 /packages/*
 /sources/*/*tar*
 /sources/*/*zip*
-/sources/strace
 /tmp
