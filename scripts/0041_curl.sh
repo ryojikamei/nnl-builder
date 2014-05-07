@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=curl
 VER=7.22.0
-REL=1
+REL=2
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME

@@ -1,6 +1,7 @@
 #!/bin/ash
 
 source ~/.nnl-builder/settings
+mkdir -p ~/DONE
 
 case "$OPKG_BUILD_MODE" in
 "native" )
@@ -25,8 +26,13 @@ for s in `ls -1 $OPKG_WORK_SCRIPTS/0*${TYPE}.sh`;do
 	if [ $? -eq 0 ]; then
 		echo "OK"
 		mv /tmp/$l.log /tmp/OK-$l.log
+
+		mv $s ~/DONE
+		opkg-cl install $OPKG_WORK_PKGS/*.opk
+		mv $OPKG_WORK_PKGS/*.opk ~/DONE/
 	else
 		echo "NG"
 		mv /tmp/$l.log /tmp/NG-$l.log
 	fi
 done
+

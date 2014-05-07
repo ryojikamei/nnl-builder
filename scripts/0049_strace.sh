@@ -3,9 +3,10 @@
 #INIT
 source ~/.nnl-builder/settings
 
+
 #PARAMS
-NAME=openssl
-VER=1.0.1g
+NAME=strace
+VER=4.8
 REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
@@ -21,9 +22,7 @@ patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
 #BUILD
 CONFIG_ADD=""
 
-./config --prefix=/usr --openssldir=/usr/lib/openssl zlib shared no-sse2 \
-&& make && \
-make INSTALL_PREFIX=$OPKG_WORK_BUILD/$INSTALL_DIR install
+$OPKG_HELPER/gnu-build.sh $NAME $VER $BUILD_DIR $INSTALL_DIR "$CONFIG_ADD"
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
 	exit 1
@@ -41,7 +40,7 @@ fi
 
 #CLEAN
 cd  $OPKG_WORK_BUILD
-#rm -rf  $BUILD_DIR $INSTALL_DIR $NAME-build
+rm -rf  $BUILD_DIR $INSTALL_DIR $NAME-build
 
 
 #FINISH
