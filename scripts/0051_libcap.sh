@@ -3,10 +3,11 @@
 #INIT
 source ~/.nnl-builder/settings
 
+
 #PARAMS
-NAME=openssl
-VER=1.0.1g
-REL=2
+NAME=libcap
+VER=2.22
+REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -15,16 +16,13 @@ SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
-patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
-
+sed -i -e "s|LIBATTR := yes|LIBATTR := no|g;" Make.Rules
+sed -i -e 's|lib_prefix=$(exec_prefix)|lib_prefix=$(prefix)/lib|g;' Make.Rules
 
 #BUILD
 CONFIG_ADD=""
 
-./config --prefix=/usr --openssldir=/usr/lib/openssl zlib shared no-sse2 \
-&& make && \
-sed -i -e 's|./demoCA|/usr/lib/openssl|g;" apps/openssl.cnf && \
-make INSTALL_PREFIX=$OPKG_WORK_BUILD/$INSTALL_DIR install
+$OPKG_HELPER/gnu-build.sh $NAME $VER $BUILD_DIR $INSTALL_DIR "$CONFIG_ADD"
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
 	exit 1

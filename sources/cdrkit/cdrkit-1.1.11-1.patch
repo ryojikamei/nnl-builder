@@ -1,0 +1,68 @@
+diff -duNr cdrkit-1.1.11-orig/genisoimage/sha256.h cdrkit-1.1.11/genisoimage/sha256.h
+--- cdrkit-1.1.11-orig/genisoimage/sha256.h	2009-05-10 21:49:54.000000000 +0000
++++ cdrkit-1.1.11/genisoimage/sha256.h	2014-05-07 07:24:30.555663036 +0000
+@@ -42,14 +42,14 @@
+ 
+ /* Initialize structure containing state of computation.
+    (FIPS 180-2: 5.3.2)  */
+-extern void sha256_init_ctx (struct sha256_ctx *ctx) __THROW;
++extern void sha256_init_ctx (struct sha256_ctx *ctx);
+ 
+ /* Starting with the result of former calls of this function (or the
+    initialization function update the context for the next LEN bytes
+    starting at BUFFER.
+    It is NOT required that LEN is a multiple of 64.  */
+ extern void sha256_process_bytes (const void *buffer, size_t len,
+-				    struct sha256_ctx *ctx) __THROW;
++				    struct sha256_ctx *ctx);
+ 
+ /* Process the remaining bytes in the buffer and put result from CTX
+    in first 32 bytes following RESBUF.
+@@ -57,6 +57,6 @@
+    IMPORTANT: On some systems it is required that RESBUF is correctly
+    aligned for a 32 bits value.  */
+ extern void *sha256_finish_ctx (struct sha256_ctx *ctx, void *resbuf)
+-  __THROW;
++ ;
+ 
+ #endif /* sha256.h */
+diff -duNr cdrkit-1.1.11-orig/genisoimage/sha512.h cdrkit-1.1.11/genisoimage/sha512.h
+--- cdrkit-1.1.11-orig/genisoimage/sha512.h	2009-05-10 21:49:54.000000000 +0000
++++ cdrkit-1.1.11/genisoimage/sha512.h	2014-05-07 07:24:30.555663036 +0000
+@@ -42,14 +42,14 @@
+ 
+ /* Initialize structure containing state of computation.
+    (FIPS 180-2: 5.3.3)  */
+-extern void sha512_init_ctx (struct sha512_ctx *ctx) __THROW;
++extern void sha512_init_ctx (struct sha512_ctx *ctx);
+ 
+ /* Starting with the result of former calls of this function (or the
+    initialization function update the context for the next LEN bytes
+    starting at BUFFER.
+    It is NOT required that LEN is a multiple of 128.  */
+ extern void sha512_process_bytes (const void *buffer, size_t len,
+-				    struct sha512_ctx *ctx) __THROW;
++				    struct sha512_ctx *ctx);
+ 
+ /* Process the remaining bytes in the buffer and put result from CTX
+    in first 64 bytes following RESBUF.
+@@ -57,6 +57,6 @@
+    IMPORTANT: On some systems it is required that RESBUF is correctly
+    aligned for a 64 bits value.  */
+ extern void *sha512_finish_ctx (struct sha512_ctx *ctx, void *resbuf)
+-  __THROW;
++ ;
+ 
+ #endif /* sha512.h */
+diff -duNr cdrkit-1.1.11-orig/include/xconfig.h.in cdrkit-1.1.11/include/xconfig.h.in
+--- cdrkit-1.1.11-orig/include/xconfig.h.in	2006-12-02 11:10:05.000000000 +0000
++++ cdrkit-1.1.11/include/xconfig.h.in	2014-05-07 07:24:30.544663036 +0000
+@@ -187,7 +187,7 @@
+  *	they are placed before the large file tests.
+  */
+ 
+-#define HAVE_RCMD 1		/* rcmd() is present in libc/libsocket */
++#undef HAVE_RCMD		/* rcmd() is present in libc/libsocket */
+ #define HAVE_SOCKET 1		/* socket() is present in libc/libsocket */
+ #define HAVE_SOCKETPAIR 1		/* socketpair() is present in libc/libsocket */
+ #define HAVE_GETSERVBYNAME 1	/* getservbyname() is present in libc/libsocket */
