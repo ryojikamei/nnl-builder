@@ -5,23 +5,23 @@ source ~/.nnl-builder/settings
 
 
 #PARAMS
-NAME=cmake
-VER=2.8.7
+NAME=expat
+VER=2.0.1
 REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
-
 
 #PREP
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
 #patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
+sed -i -e 's/linux-newlib/linux-musl/g;' conftools/config.sub
+
 
 #BUILD
-#CONFIG_ADD="--system-libs"
-CONFIG_ADD="--system-curl --no-system-expat --system-zlib --system-bzip2 --no-system-libarchive"
+CONFIG_ADD=""
 
 $OPKG_HELPER/gnu-build.sh $NAME $VER $BUILD_DIR $INSTALL_DIR "$CONFIG_ADD"
 if [ $? -ne 0 ]; then
