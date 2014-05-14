@@ -6,15 +6,19 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=texinfo
 VER=4.13a
-REL=2
+REL=3
 BUILD_DIR=$NAME-4.13
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
+EXTERNAL_SRC_0=$NAME-$VER.tar.gz
+EXTERNAL_URL_0=$FTP_GNU/$NAME
+
+
 #PREP
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
-tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
+tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
 if [ $OPKG_BUILD_MODE != "native" ]; then
 	patch -Np1 -i $SOURCE_DIR/$NAME-$VER-2.patch

@@ -6,15 +6,18 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=wireless_tools
 VER=29
-REL=2
+REL=3
 BUILD_DIR=$NAME.$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
+EXTERNAL_SRC_0=$NAME.$VER.tar.gz
+EXTERNAL_URL_0=http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux
+
 #PREP
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
-tar xf $SOURCE_DIR/$NAME.$VER.*tar* && cd $BUILD_DIR
+tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
 sed -i -e "s/-Os/$OPKG_OPTFLAGS/g;" Makefile
 sed -i -e "s/CC = gcc//g;" Makefile
 sed -i -e "s/AR = ar//g;" Makefile

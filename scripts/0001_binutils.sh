@@ -7,15 +7,18 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=binutils
 VER=2.22
-REL=8
+REL=9
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
+EXTERNAL_SRC_0=$NAME-$VER.tar.bz2
+EXTERNAL_URL_0=$FTP_GNU/$NAME
+
 #PREP
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
-tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
+tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
 if [ $OPKG_BUILD_MODE == "target" ]; then
 	patch -Np1 -i $SOURCE_DIR/$NAME-$VER-2.patch

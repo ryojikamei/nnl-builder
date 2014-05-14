@@ -7,15 +7,19 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=cdrkit
 VER=1.1.11
-REL=1
+REL=2
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
+EXTERNAL_SRC_0=$NAME-$VER.tar.gz
+EXTERNAL_URL_0=http://cdrkit.org/releases
+
+
 #PREP
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
-tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
+tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
 
 #BUILD

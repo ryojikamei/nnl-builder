@@ -6,15 +6,19 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=curl
 VER=7.22.0
-REL=2
+REL=3
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
+EXTERNAL_SRC_0=$NAME-$VER.tar.bz2
+EXTERNAL_URL_0=http://curl.haxx.se/download
+
+
 #PREP
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
-tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
+tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
 sed -i -e 's/linux-newlib/linux-musl/g;' config.sub
 
 

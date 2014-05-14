@@ -6,15 +6,18 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=bash
 VER=4.2
-REL=5
+REL=6
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
+EXTERNAL_SRC_0=$NAME-$VER.tar.gz
+EXTERNAL_URL_0=$FTP_GNU/$NAME
+
 #PREP
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
-tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
+tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
 for p in `ls -1 $SOURCE_DIR/$NAME-$VER-patches/*` ; do
 	patch -Np0 -i $p
 done

@@ -7,20 +7,26 @@ source ~/.nnl-builder/settings
 NAME=gcc
 VER=4.6.4
 REL=10
-MPFR_VER=3.1.2
-GMP_VER=5.1.3
-MPC_VER=1.0.2
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
+EXTERNAL_SRC_0=$NAME-$VER.tar.bz2
+EXTERNAL_URL_0=$FTP_GNU/$NAME/$NAME-$VER
+EXTERNAL_SRC_1=mpfr-3.1.2.tar.xz
+EXTERNAL_URL_1=$FTP_GNU/mpfr
+EXTERNAL_SRC_2=gmp-5.1.3.tar.xz
+EXTERNAL_URL_2=$FTP_GNU/gmp
+EXTERNAL_SRC_3=mpc-1.0.2.tar.gz
+EXTERNAL_URL_3=$FTP_GNU/mpc
+
 #PREP
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
-tar xf $SOURCE_DIR/$NAME-$VER.*tar* && cd $BUILD_DIR
-tar xf $SOURCE_DIR/mpfr-$MPFR_VER.* && mv mpfr-* mpfr
-tar xf $SOURCE_DIR/gmp-$GMP_VER.* && mv gmp-* gmp
-tar xf $SOURCE_DIR/mpc-$MPC_VER.* && mv mpc-* mpc
+tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
+tar xf $SOURCE_DIR/$EXTERNAL_SRC_1 && mv mpfr-* mpfr
+tar xf $SOURCE_DIR/$EXTERNAL_SRC_2 && mv gmp-* gmp
+tar xf $SOURCE_DIR/$EXTERNAL_SRC_3 && mv mpc-* mpc
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-musl.patch
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-musl-2.patch
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-musl-3.patch
