@@ -12,7 +12,7 @@ INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
 EXTERNAL_SRC_0=${NAME}30.tar.gz
-EXTERNAL_URL_0=http://downloads.sourceforge.net/project/infozip/Zip%203.x%20%28latest%29/$VER
+EXTERNAL_URL_0=$URL_SF/infozip/Zip%203.x%20%28latest%29/$VER
 
 #PREP
 cd $OPKG_WORK_BUILD

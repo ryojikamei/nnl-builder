@@ -12,7 +12,7 @@ INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
 EXTERNAL_SRC_0=$NAME-$VER.tar.xz
-EXTERNAL_URL_0=ftp://ftp.kernel.org/pub/linux/kernel/v3.x
+EXTERNAL_URL_0=$URL_KERNEL/kernel/v3.x
 
 
 #PREP

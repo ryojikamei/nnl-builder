@@ -12,7 +12,7 @@ INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
 EXTERNAL_SRC_0=$NAME-$VER.tar.bz2
-EXTERNAL_URL_0=ftp://www.kernel.org/pub/linux/utils/boot/syslinux
+EXTERNAL_URL_0=$URL_KERNEL/utils/boot/syslinux
 
 
 #PREP

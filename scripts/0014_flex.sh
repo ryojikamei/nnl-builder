@@ -12,7 +12,7 @@ INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
 EXTERNAL_SRC_0=$NAME-$VER.tar.bz2
-EXTERNAL_URL_0=http://downloads.sourceforge.net/project/flex
+EXTERNAL_URL_0=$URL_SF/flex
 
 #PREP
 cd $OPKG_WORK_BUILD

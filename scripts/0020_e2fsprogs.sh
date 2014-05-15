@@ -12,7 +12,7 @@ INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
 EXTERNAL_SRC_0=$NAME-$VER.tar.xz
-EXTERNAL_URL_0=ftp://www.kernel.org/pub/linux/kernel/people/tytso/$NAME/v$VER
+EXTERNAL_URL_0=$URL_KERNEL/kernel/people/tytso/$NAME/v$VER
 
 #PREP
 cd $OPKG_WORK_BUILD

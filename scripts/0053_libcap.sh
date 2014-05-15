@@ -13,7 +13,7 @@ INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
 EXTERNAL_SRC_0=$NAME-$VER.tar.xz
-EXTERNAL_URL_0=ftp://ftp.kernel.org/pub/linux/libs/security/linux-privs/libcap2
+EXTERNAL_URL_0=$URL_KERNEL/libs/security/linux-privs/libcap2
 
 #PREP
 cd $OPKG_WORK_BUILD

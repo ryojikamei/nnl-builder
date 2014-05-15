@@ -13,7 +13,7 @@ INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
 EXTERNAL_SRC_0=$NAME-$VER.tar.xz
-EXTERNAL_URL_0=http://downloads.sourceforge.net/project/strace/strace/$VER
+EXTERNAL_URL_0=$URL_SF/strace/strace/$VER
 
 #PREP
 cd $OPKG_WORK_BUILD

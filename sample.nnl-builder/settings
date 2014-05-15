@@ -65,3 +65,4 @@ NR_CPUS=`cat /proc/cpuinfo | grep processor | wc -l`
 OPKG_MAKEFLAGS="-j`expr $NR_CPUS + 1`"
 OPKG_HELPER="$OPKG_WORK_SCRIPTS/helper"
 
+FTP_GNU=ftp://ftp.gnu.org/gnu
