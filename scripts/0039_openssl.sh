@@ -27,7 +27,7 @@ CONFIG_ADD=""
 
 ./config --prefix=/usr --openssldir=/usr/lib/openssl zlib shared no-sse2 \
 && make && \
-sed -i -e 's|./demoCA|/usr/lib/openssl|g;" apps/openssl.cnf && \
+sed -i -e 's|./demoCA|/usr/lib/openssl|g;' apps/openssl.cnf && \
 make INSTALL_PREFIX=$OPKG_WORK_BUILD/$INSTALL_DIR install
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
