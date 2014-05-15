@@ -6,13 +6,15 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=linux
 VER=3.2.58
-REL=2
+REL=3
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
 EXTERNAL_SRC_0=$NAME-$VER.tar.xz
 EXTERNAL_URL_0=$URL_KERNEL/kernel/v3.x
+EXTERNAL_SRC_1=unionfs-2.5.13_for_3.2.55.diff.gz
+EXTERNAL_URL_1=http://download.filesystems.org/unionfs/unionfs-2.x
 
 
 #PREP
@@ -20,6 +22,7 @@ cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
+gzip -dc $SOURCE_DIR/$EXTERNAL_SRC_1 | patch -Np1
 if [ $OPKG_BUILD_MODE == "native" ]; then
 	patch -Np1 -i $SOURCE_DIR/$NAME-$VER-2.patch
 fi
@@ -69,7 +72,7 @@ fi
 
 #CLEAN
 cd  $OPKG_WORK_BUILD
-rm -rf  $BUILD_DIR $INSTALL_DIR $NAME-build
+#rm -rf  $BUILD_DIR $INSTALL_DIR $NAME-build
 
 
 #FINISH
