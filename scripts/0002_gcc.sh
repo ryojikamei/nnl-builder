@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/ash -x
 
 #INIT
 source ~/.nnl-builder/settings
@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=gcc
 VER=4.6.4
-REL=10
+REL=11
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME

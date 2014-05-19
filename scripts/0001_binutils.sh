@@ -7,7 +7,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=binutils
 VER=2.22
-REL=9
+REL=10
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -26,7 +26,7 @@ fi
 
 
 #BUILD
-if [ `which makeinfo` -ne 0 ]; then
+if [ "x`which makeinfo`" == "x" ]; then
 	echo "Install texinfo package beforehand!"
 	exit 1
 fi

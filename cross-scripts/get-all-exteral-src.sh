@@ -1,0 +1,1 @@
+../scripts/get-all-exteral-src.sh
