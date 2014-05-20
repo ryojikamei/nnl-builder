@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=zlib
 VER=1.2.8
-REL=5
+REL=6
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -21,13 +21,22 @@ tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
 
 
 #BUILD
-if [ $OPKG_BUILD_MODE == "target" ]; then
-	export CC="$OPKG_TARGET-gcc"
-else
+case "$OPKG_BUILD_MODE" in
+"native" )
 	export CC="gcc"
-fi
+	SHARED="--sharedlibdir=/lib"
+	;;
+"target" )
+	export CC="$OPKG_TARGET-gcc"
+	SHARED="--sharedlibdir=/lib"
+	;;
+"cross" )
+	export CC="$OPKG_TARGET-gcc"
+	SHARED="--static"
+	;;
+esac
 CFLAGS="$OPKG_OPTFLAGS" ./configure --prefix=/ --eprefix=/bin \
-	--libdir=/usr/lib --sharedlibdir=/lib --includedir=/usr/include && \
+	--libdir=/usr/lib $SHARED --includedir=/usr/include && \
 make $OPKG_MAKEFLAGS && make DESTDIR=$OPKG_WORK_BUILD/$INSTALL_DIR install
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
