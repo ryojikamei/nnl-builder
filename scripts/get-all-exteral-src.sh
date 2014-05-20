@@ -24,7 +24,7 @@ for s in `ls $PROG_DIR/0*.sh`; do
 			else
 				eval URL=`grep ^EXTERNAL_URL_$num $s | cut -f2 -d=`
 				echo -n "GET: $URL/$SRC... "
-				mkdir -p $DIR && wget -q -c $URL/$SRC -P $DIR
+				mkdir -p $DIR && wget -q -P $DIR -c $URL/$SRC
 				if [ $? -eq 0 ]; then
 					echo "done"
 				else
