@@ -27,7 +27,7 @@ if [ -f ../$3/configure ]; then
 	fi
 fi
 if [ $ret -ne 0 ]; then
-	return $ret
+	exit $ret
 fi
 
 rm -rf $OPKG_WORK_BUILD/$4

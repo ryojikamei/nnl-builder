@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=linux
 VER=3.2.58
-REL=3
+REL=4
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -18,7 +18,7 @@ EXTERNAL_URL_1=http://download.filesystems.org/unionfs/unionfs-2.x
 
 
 #PREP
-cd $OPKG_WORK_BUILD
+mkdir -p $OPKG_WORK_BUILD && cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
@@ -50,6 +50,11 @@ else
 	fi
 	MAKE_TARGET="install modules_install firmware_install headers_install"
 fi
+#prevent from running /sbin/installkernel in host
+for i in arch/*/boot/install.sh; do
+	grep -v INSTALLKERNEL $i > $i.tmp
+	mv $i.tmp $i
+done
 make ARCH=$OPKG_ARCH \
 	INSTALL_PATH=$OPKG_WORK_BUILD/$INSTALL_DIR/boot \
 	INSTALL_MOD_STRIP=1 \

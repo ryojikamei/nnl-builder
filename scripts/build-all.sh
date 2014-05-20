@@ -35,6 +35,9 @@ for s in `ls -1 $OPKG_WORK_SCRIPTS/0*${TYPE}.sh`;do
 	else
 		echo "NG"
 		mv /tmp/$l.log /tmp/NG-$l.log
+		if [ "x$1" != "x--continue" ]; then
+			exit 1
+		fi
 	fi
 done
 
