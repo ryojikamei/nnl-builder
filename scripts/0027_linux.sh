@@ -74,7 +74,7 @@ fi
 
 #CLEAN
 cd  $OPKG_WORK_BUILD
-#rm -rf  $BUILD_DIR $INSTALL_DIR $NAME-build
+rm -rf  $BUILD_DIR $INSTALL_DIR $NAME-build
 
 
 #FINISH
