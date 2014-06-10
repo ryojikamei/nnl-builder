@@ -6,7 +6,7 @@ source ~/.nnl-builder/settings
 #PARAMS
 NAME=busybox
 VER=1.22.1
-REL=6
+REL=7
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -30,13 +30,15 @@ sed -i -e 's/NAME_MAX/255/g;' coreutils/split.c
 if [ $OPKG_BUILD_MODE != "native" ]; then
 	export CROSS_COMPILE=${OPKG_TARGET}-
 fi
-make defconfig
+cp -a $SOURCE_DIR/$NAME-$VER.config .config
+make oldconfig
+#make defconfig
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2
 	exit 1
 fi
-sed -i 's/\(CONFIG_\)\(.*\)\(INETD\)\(.*\)=y/# \1\2\3\4 is not set/g' .config
-sed -i 's/# CONFIG_INSTALL_NO_USR is not set/CONFIG_INSTALL_NO_USR=y/' .config
+#-sed -i 's/\(CONFIG_\)\(.*\)\(INETD\)\(.*\)=y/# \1\2\3\4 is not set/g' .config
+#-sed -i 's/# CONFIG_INSTALL_NO_USR is not set/CONFIG_INSTALL_NO_USR=y/' .config
 make $OPKG_MAKEFLAGS && \
 make CONFIG_PREFIX=$OPKG_WORK_BUILD/$INSTALL_DIR install && \
 cp -a examples/depmod.pl $OPKG_WORK_BUILD/$INSTALL_DIR/sbin/
