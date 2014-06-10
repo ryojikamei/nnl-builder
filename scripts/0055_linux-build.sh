@@ -8,8 +8,8 @@ source ~/.nnl-builder/settings
 #PARAMS
 P_NAME=linux-build
 NAME=linux
-VER=3.2.59
-REL=2
+VER=3.2.60
+REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$P_NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
