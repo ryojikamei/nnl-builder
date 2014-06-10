@@ -5,7 +5,7 @@ source ~/.nnl-builder/settings
 
 #PARAMS
 NAME=linux
-VER=3.2.59
+VER=3.2.60
 REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
