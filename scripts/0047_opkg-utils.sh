@@ -5,8 +5,8 @@ source ~/.nnl-builder/settings
 
 #PARAMS
 NAME=opkg-utils
-VER=0f6a67bc150c0396dd7eeb477a0b9a1ce58a2118
-REL=2
+VER=eae0d8fa44e8594aa90eadf06e5f4fbeef314509
+REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
