@@ -5,8 +5,8 @@ source ~/.nnl-builder/settings
 
 #PARAMS
 NAME=e2fsprogs
-VER=1.42.9
-REL=3
+VER=1.42.10
+REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -18,7 +18,6 @@ EXTERNAL_URL_0=$URL_KERNEL/kernel/people/tytso/$NAME/v$VER
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
-patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
 
 
 #BUILD
