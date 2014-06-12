@@ -6,8 +6,8 @@ source ~/.nnl-builder/settings
 
 #PARAMS
 NAME=musl
-VER=1.0.1
-REL=2
+VER=1.0.3
+REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
