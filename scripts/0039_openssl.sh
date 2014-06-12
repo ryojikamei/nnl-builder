@@ -5,8 +5,8 @@ source ~/.nnl-builder/settings
 
 #PARAMS
 NAME=openssl
-VER=1.0.1g
-REL=3
+VER=1.0.1h
+REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
