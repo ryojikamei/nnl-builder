@@ -5,8 +5,8 @@ source ~/.nnl-builder/settings
 
 #PARAMS
 NAME=Python
-VER=2.7.6
-REL=5
+VER=2.7.7
+REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -19,7 +19,7 @@ cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
-patch -Np1 -i $SOURCE_DIR/$NAME-$VER-2.patch
+
 
 #BUILD
 CONFIG_ADD=" --enable-shared"

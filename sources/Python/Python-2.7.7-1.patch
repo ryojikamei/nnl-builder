@@ -1,0 +1,11 @@
+--- Python-2.7.6/configure
++++ Python-2.7.6-1/configure
+@@ -5944,7 +5944,7 @@
+ 		# debug builds.
+ 		OPT="-g -O0 -Wall $STRICT_PROTO"
+ 	    else
+-		OPT="-g $WRAP -O3 -Wall $STRICT_PROTO"
++		OPT="$WRAP -Wall $STRICT_PROTO"
+ 	    fi
+ 	    ;;
+ 	*)
