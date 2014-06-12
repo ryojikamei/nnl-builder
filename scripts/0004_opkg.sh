@@ -5,8 +5,8 @@ source ~/.nnl-builder/settings
 
 #PARAMS
 NAME=opkg
-VER=0.2.1
-REL=6
+VER=0.2.2
+REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
@@ -18,6 +18,7 @@ EXTERNAL_URL_0=http://downloads.yoctoproject.org/releases/opkg
 cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
+sed -i -e 's/linux-newlib/linux-musl/g;' conf/config.sub
 
 #BUILD
 CONFIG_ADD=" --disable-curl --disable-gpg --enable-shared"
