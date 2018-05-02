@@ -5,8 +5,8 @@ source ~/.nnl-builder/settings
 
 #PARAMS
 NAME=zlib
-VER=1.2.8
-REL=6
+VER=1.2.11
+REL=1
 BUILD_DIR=$NAME-$VER
 INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
