@@ -66,5 +66,5 @@ OPKG_MAKEFLAGS="-j`expr $NR_CPUS + 1`"
 OPKG_HELPER="$OPKG_WORK_SCRIPTS/helper"
 
 URL_GNU=ftp://ftp.gnu.org/gnu
-URL_KERNEL=ftp://ftp.kernel.org/pub/linux
+URL_KERNEL=http://www.kernel.org/pub/linux
 URL_SF=http://downloads.sourceforge.net/project
