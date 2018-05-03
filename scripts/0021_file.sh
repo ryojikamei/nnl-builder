@@ -1,7 +1,7 @@
 #!/bin/ash -x
 
 #INIT
-source ~/.nnl-builder/settings
+. ~/.nnl-builder/settings
 
 #PARAMS
 NAME=file
@@ -23,7 +23,7 @@ sed -i -e 's/linux-newlib/linux-musl/g;' config.sub
 
 #BUILD
 CONFIG_ADD=""
-if [ "$OPKG_BUILD_MODE" == "target" ]; then
+if [ "$OPKG_BUILD_MODE" = "target" ]; then
 	cp -av $OPKG_WORK_CROSS/usr/share/misc/magic.mgc magic/
 fi
 $OPKG_HELPER/gnu-build.sh $NAME $VER $BUILD_DIR $INSTALL_DIR "$CONFIG_ADD"

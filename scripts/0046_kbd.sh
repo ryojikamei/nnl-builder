@@ -1,7 +1,7 @@
 #!/bin/ash -x
 
 #INIT
-source ~/.nnl-builder/settings
+. ~/.nnl-builder/settings
 
 #PARAMS
 NAME=kbd

@@ -5,9 +5,9 @@
 # - STRIP_BIN: strip command options for non shared libraries
 # - ARCH: architecture value. "opkg-cl print-architecture" will show
 
-source ~/.nnl-builder/settings
+. ~/.nnl-builder/settings
 
-if [ "x$4" == "x" ]; then
+if [ "x$4" = "x" ]; then
         echo "Usage: packaging.sh [name] [ver-rel] [sourcedir] [installeddir] <opts>"
         exit 1
 fi
@@ -63,7 +63,7 @@ P_VER=$2
 echo "Version:	$P_VER"
 
 # Architecture: set P_ARCH to overwrite for "noarch"
-if [ x"$P_ARCH" == "x" ]; then
+if [ "x$P_ARCH" = "x" ]; then
 	P_ARCH=$OPKG_CTRL_ARCH
 fi
 echo "Architecture:	$P_ARCH"
@@ -85,16 +85,16 @@ if [ "x$TARGET_LIBS" != "x" ]; then
 	for l in `sort -b -u $TARGET_DIR/auto-depends.libs | grep ^/`; do
 		DEPPKG=`opkg-cl search $l | cut -f1 -d' '`
 		#FOUND=""
-		if [ "x$DEPPKG" == "x" ]; then
+		if [ "x$DEPPKG" = "x" ]; then
 			# eliminate self-contained libs
 			n=`basename $l`
 			FOUND=`find $TARGET_DIR -name $n`
-			if [ "x$FOUND" == "x" ]; then
+			if [ "x$FOUND" = "x" ]; then
 				echo "WARNING: dependency file $l is not owned by any packages!"
 			fi
 		else
 			# eliminate itself
-			if [ $DEPPKG != $P_NAME ]; then
+			if [ "$DEPPKG" != "$P_NAME" ]; then
 				echo $DEPPKG >> $TARGET_DIR/auto-depends
 			fi
 		fi
@@ -116,7 +116,7 @@ cat $TARGET_DIR/auto-depends $TARGET_DIR/depends.in 2>/dev/null | sort -u > $TAR
 echo -n "Depends:	"
 P_DEPS=""
 for p in `cat $TARGET_DIR/depends`; do
-	if [ "x$P_DEPS" == "x" ]; then
+	if [ "x$P_DEPS" = "x" ]; then
 		P_DEPS=$p
 		echo -n $p
 	else
@@ -136,10 +136,10 @@ Depends:	$P_DEPS
 EOF
 
 # STRIP
-if [ "x$STRIP_SHLIB" == "x" ]; then
+if [ "x$STRIP_SHLIB" = "x" ]; then
 	STRIP_SHLIB="strip --strip-debug"
 fi
-if [ "x$STRIP_BIN" == "x" ]; then
+if [ "x$STRIP_BIN" = "x" ]; then
 	STRIP_BIN="strip --strip-unneeded"
 fi
 find $TARGET_DIR -type f | xargs file | grep " not stripped" | \

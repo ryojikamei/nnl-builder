@@ -1,7 +1,7 @@
 #!/bin/ash -x
 
 #INIT
-source ~/.nnl-builder/settings
+. ~/.nnl-builder/settings
 
 #PARAMS
 NAME=filesystem
@@ -29,7 +29,7 @@ mkdir -p usr/local && cd usr && mkdir bin include lib sbin share src \
 
 #PACK
 cd $OPKG_WORK_BUILD
-if [ "$OPKG_BUILD_MODE" == "native" ]; then
+if [ "$OPKG_BUILD_MODE" = "native" ]; then
 	cp -av $SOURCE_DIR/CONTROL $INSTALL_DIR/
 	DEPENDS=`grep ^Depends: $SOURCE_DIR/CONTROL/control`
 	cat > $SOURCE_DIR/CONTROL/control <<EOF

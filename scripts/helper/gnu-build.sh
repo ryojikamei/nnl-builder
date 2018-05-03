@@ -1,8 +1,8 @@
 #!/bin/ash -x
 
-source ~/.nnl-builder/settings
+. ~/.nnl-builder/settings
 
-if [ "x$OPKG_WORK_BUILD/$4" == "x$OPKG_WORK_BUILD/" ]; then
+if [ "x$OPKG_WORK_BUILD/$4" = "x$OPKG_WORK_BUILD/" ]; then
 	echo "Usage: gnu-build.sh [name] [ver] [builddir] [installroot] <opts>"
 	exit 1
 fi

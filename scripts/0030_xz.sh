@@ -1,7 +1,7 @@
 #!/bin/ash -x
 
 #INIT
-source ~/.nnl-builder/settings
+. ~/.nnl-builder/settings
 
 #PARAMS
 NAME=xz
@@ -12,7 +12,7 @@ INSTALL_DIR=$NAME-root
 SOURCE_DIR=$OPKG_WORK_SOURCES/$NAME
 
 EXTERNAL_SRC_0=$NAME-$VER.tar.xz
-EXTERNAL_URL_0=http://tukaani.org/xz
+EXTERNAL_URL_0=https://tukaani.org/xz
 
 #PREP
 cd $OPKG_WORK_BUILD

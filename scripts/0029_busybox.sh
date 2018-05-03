@@ -1,7 +1,7 @@
 #!/bin/ash -x
 
 #INIT
-source ~/.nnl-builder/settings
+. ~/.nnl-builder/settings
 
 #PARAMS
 NAME=busybox
@@ -27,7 +27,7 @@ sed -i -e 's/NAME_MAX/255/g;' coreutils/split.c
 
 
 #BUILD
-if [ $OPKG_BUILD_MODE != "native" ]; then
+if [ "$OPKG_BUILD_MODE" != "native" ]; then
 	export CROSS_COMPILE=${OPKG_TARGET}-
 fi
 cp -a $SOURCE_DIR/$NAME-$VER.config .config

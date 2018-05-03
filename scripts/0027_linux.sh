@@ -1,7 +1,7 @@
 #!/bin/ash -x
 
 #INIT
-source ~/.nnl-builder/settings
+. ~/.nnl-builder/settings
 
 #PARAMS
 NAME=linux
@@ -20,13 +20,13 @@ mkdir -p $OPKG_WORK_BUILD && cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
-if [ $OPKG_BUILD_MODE == "native" ]; then
+if [ "$OPKG_BUILD_MODE" = "native" ]; then
 	patch -Np1 -i $SOURCE_DIR/$NAME-$VER-2.patch
 fi
 
 
 #BUILD
-if [ $OPKG_BUILD_MODE == "cross" ]; then
+if [ "$OPKG_BUILD_MODE" = "cross" ]; then
 	make mrproper
 	if [ $? -ne 0 ]; then
 		echo "ERROR:	building in $NAME-$VER" >&2

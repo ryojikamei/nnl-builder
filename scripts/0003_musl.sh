@@ -1,7 +1,7 @@
 #!/bin/ash -x
 
 #INIT
-source ~/.nnl-builder/settings
+. ~/.nnl-builder/settings
 
 
 #PARAMS
@@ -25,7 +25,7 @@ tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
 
 #BUILD
 CONFIG_ADD=" --libdir=/lib"
-if [ $OPKG_BUILD_MODE != "native" ]; then export CROSS_COMPILE="${OPKG_TARGET}-"; fi && \
+if [ "$OPKG_BUILD_MODE" != "native" ]; then export CROSS_COMPILE="${OPKG_TARGET}-"; fi && \
 $OPKG_HELPER/gnu-build.sh $NAME $VER $BUILD_DIR $INSTALL_DIR "$CONFIG_ADD"
 if [ $? -ne 0 ]; then
 	echo "ERROR:	building in $NAME-$VER" >&2

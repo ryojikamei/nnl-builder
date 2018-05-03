@@ -1,7 +1,7 @@
 #!/bin/ash -x
 
 #INIT
-source ~/.nnl-builder/settings
+. ~/.nnl-builder/settings
 
 #PARAMS
 NAME=gcc
@@ -30,7 +30,7 @@ tar xf $SOURCE_DIR/$EXTERNAL_SRC_3 && mv mpc-* mpc
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-musl.patch
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-musl-2.patch
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-musl-3.patch
-if [ $OPKG_BUILD_MODE == "target" ]; then
+if [ "$OPKG_BUILD_MODE" = "target" ]; then
 	patch -Np1 -i $SOURCE_DIR/$NAME-$VER-musl-4.patch
 fi
 
@@ -70,8 +70,8 @@ fi
 #PACK
 cd $OPKG_WORK_BUILD
 rm -fv $INSTALL_DIR/usr/lib/libiberty.a && \
-if [ $OPKG_BUILD_MODE == "native" ]; then rm -fv $INSTALL_DIR/usr/bin/*-linux-musl-*; fi && \
-if [ $OPKG_BUILD_MODE == "native" ]; then ln -s gcc $INSTALL_DIR/usr/bin/cc; fi && \
+if [ "$OPKG_BUILD_MODE" = "native" ]; then rm -fv $INSTALL_DIR/usr/bin/*-linux-musl-*; fi && \
+if [ "$OPKG_BUILD_MODE" = "native" ]; then ln -s gcc $INSTALL_DIR/usr/bin/cc; fi && \
 # --strip-unneeded has problem in perl or python
 STRIP_BIN="strip --strip-debug" \
 $OPKG_HELPER/packaging.sh $NAME $VER-$REL $SOURCE_DIR $INSTALL_DIR

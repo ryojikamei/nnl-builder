@@ -2,12 +2,12 @@
 
 PROG_DIR=$PWD/`dirname $0`
 
-source ~/.nnl-builder/settings
+. ~/.nnl-builder/settings
 
 for s in `ls $PROG_DIR/0*.sh`; do
 	src=""
 	src=`grep ^EXTERNAL_SRC_ $s`
-	if [ "x$src" == "x" ]; then
+	if [ "x$src" = "x" ]; then
 		continue
 	else
 		NAME=`grep ^NAME= $s | cut -f2 -d=`
@@ -24,7 +24,7 @@ for s in `ls $PROG_DIR/0*.sh`; do
 			else
 				eval URL=`grep ^EXTERNAL_URL_$num $s | cut -f2 -d=`
 				echo -n "GET: $URL/$SRC... "
-				mkdir -p $DIR && wget -q -P $DIR -c $URL/$SRC
+				mkdir -p $DIR && wget --no-check-certificate -q -P $DIR -c $URL/$SRC
 				if [ $? -eq 0 ]; then
 					echo "done"
 				else

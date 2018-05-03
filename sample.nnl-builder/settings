@@ -10,11 +10,11 @@ OPKG_CTRL_ARCH=i486
 
 
 # prevent mode change from sourcing multiply
-if [ "x$OPKG_BUILD_MODE" == "x" ]; then
-	if [ "`echo $0 | grep cross`" == $0 ]; then
+if [ "x$OPKG_BUILD_MODE" = "x" ]; then
+	if [ "`echo $0 | grep cross`" = "$0" ]; then
 		echo "Running to make cross tools"
 		export OPKG_BUILD_MODE="cross"
-	else if [ "`echo $0 | grep target`" == $0 ]; then
+	else if [ "`echo $0 | grep target`" = "$0" ]; then
 		echo "Running to make target tree"
 		export OPKG_BUILD_MODE="target"
 	else

@@ -1,7 +1,7 @@
 #!/bin/ash -x
 
 #INIT
-source ~/.nnl-builder/settings
+. ~/.nnl-builder/settings
 
 
 #PARAMS
@@ -20,20 +20,20 @@ cd $OPKG_WORK_BUILD
 rm -rf $BUILD_DIR
 tar xf $SOURCE_DIR/$EXTERNAL_SRC_0 && cd $BUILD_DIR
 patch -Np1 -i $SOURCE_DIR/$NAME-$VER-1.patch
-if [ $OPKG_BUILD_MODE == "target" ]; then
+if [ "$OPKG_BUILD_MODE" = "target" ]; then
 	patch -Np1 -i $SOURCE_DIR/$NAME-$VER-2.patch
 fi
 
 
 #BUILD
-if [ "x`which makeinfo`" == "x" ]; then
+if [ "x`which makeinfo`" = "x" ]; then
 	echo "Install texinfo package beforehand!"
 	exit 1
 fi
 
 rm -rfv $OPKG_WORK_BUILD/$NAME-build
 mkdir -v $OPKG_WORK_BUILD/$NAME-build
-if [ $OPKG_BUILD_MODE == "cross" ]; then
+if [ "$OPKG_BUILD_MODE" = "cross" ]; then
 	CONFIG_ADD=" --with-sysroot=$OPKG_WORK_CROSS --with-lib-path=$OPKG_WORK_CROSS/usr/lib:$OPKG_WORK_CROSS/lib:$OPKG_WORK_TARGET/usr/lib:$OPKG_WORK_TARGET/lib --disable-werror"
 else
 	CONFIG_ADD=""
